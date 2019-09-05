@@ -59,6 +59,7 @@ final class ProfileReviewViewController: UIViewController {
             ),
             for: .normal
         )
+        button.addTarget(self, action: #selector(fireAction), for: .touchUpInside)
         return button
     }()
 
@@ -139,11 +140,29 @@ final class ProfileReviewViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        AnalyticsEvents.ProfileReview.open.send()
         bannerView.text = userType.message
     }
 
     @objc
+    private func fireAction() {
+        AnalyticsEvents.ProfileReview.activeButtonTap.send()
+        switch userType {
+        case .consumer:
+            break
+        case .stylist:
+            guard let callUrl = URL(string: "tel://+79064336861") else {
+                return
+            }
+            if UIApplication.shared.canOpenURL(callUrl) {
+                UIApplication.shared.open(callUrl, options: [:], completionHandler: nil)
+            }
+        }
+    }
+
+    @objc
     private func logOut() {
+        AnalyticsEvents.ProfileReview.logout.send()
         authorizationService.logout()
     }
 }

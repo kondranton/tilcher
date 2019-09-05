@@ -22,5 +22,5 @@ struct StylistProfile: Codable {
     let instagramUsername: String?
     let counts: Statistics?
     var balance: Balance
-//    var imagePath: String = ""
+    var profilePhoto: RemoteImage?
 }

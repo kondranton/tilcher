@@ -1,13 +1,17 @@
 import SnapKit
 import YPImagePicker
+import PromiseKit
 
 final class ProfileEditViewController: UITableViewController {
     private let authService = AuthorizationService()
+    private let imageUploadService = ImageUploadService()
     private let profileService: ProfileServiceProtocol
-    private var profile: NewUserProfile
+    private var profile: EditableUserProfile
+
+    private var imageUploadFinalizer: PMKFinalizer?
 
     private enum Field {
-        case photo(URL)
+        case photo(String)
         case name(String)
         case instagram(String)
         case button(String)
@@ -15,8 +19,7 @@ final class ProfileEditViewController: UITableViewController {
 
     private var fields: [Field] {
         return [
-            //swiftlint:disable force_unwrapping
-            .photo(URL(string: "https://pp.userapi.com/c630330/v630330771/8f99/4vYc79boVEI.jpg?ava=1")!),
+            .photo(profile.image?.url ?? ""),
             .name(profile.name),
             .instagram(profile.instagramUsername),
             .button("Выйти")
@@ -24,7 +27,7 @@ final class ProfileEditViewController: UITableViewController {
     }
 
     init(
-        profile: NewUserProfile,
+        profile: EditableUserProfile,
         profileService: ProfileServiceProtocol
     ) {
         self.profile = profile
@@ -39,11 +42,11 @@ final class ProfileEditViewController: UITableViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
     }
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        AnalyticsEvents.ProfileEdit.open.send()
         title = "Редактировать"
-        setUpTableView()
-
         navigationItem.setLeftBarButton(
             UIBarButtonItem(
                 title: "Отменить",
@@ -62,6 +65,8 @@ final class ProfileEditViewController: UITableViewController {
             ),
             animated: false
         )
+
+        setUpTableView()
     }
 
     @objc
@@ -71,10 +76,20 @@ final class ProfileEditViewController: UITableViewController {
 
     @objc
     private func doneTap() {
-        navigationController?.dismiss(animated: true, completion: nil)
+        if let finalizer = imageUploadFinalizer {
+            finalizer.finally {
+                self.updateProfile()
+            }
+        } else {
+            updateProfile()
+        }
+    }
+
+    private func updateProfile() {
         profileService.updateProfile(data: profile)
             .done(on: .main) {
                 NotificationCenter.default.post(name: .profileChanged, object: nil)
+                self.navigationController?.dismiss(animated: true, completion: nil)
             }
             .catch { error in
                 assertionFailure(error.localizedDescription)
@@ -90,6 +105,16 @@ final class ProfileEditViewController: UITableViewController {
         tableView.register(cellClass: ActionButtonTableViewCell.self)
     }
 
+    private func set(image: UIImage) {
+        imageUploadFinalizer = imageUploadService.upload(image: image)
+            .done { remoteImage in
+                self.profile.image = remoteImage
+            }
+            .catch { error in
+                assertionFailure(error.localizedDescription)
+            }
+    }
+
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return fields.count
     }
@@ -101,9 +126,10 @@ final class ProfileEditViewController: UITableViewController {
             let cell: EditPhotoTableViewCell = tableView.dequeueReusableCell(for: indexPath)
             cell.setUp(with: url) {
                 let picker = YPImagePicker()
-                picker.didFinishPicking { [weak picker] items, _ in
+                picker.didFinishPicking { [weak picker, self] items, _ in
                     if let photo = items.singlePhoto {
                         cell.photoView.imageView.image = photo.image
+                        self.set(image: photo.image)
                     }
                     picker?.dismiss(animated: true, completion: nil)
                 }
@@ -133,6 +159,7 @@ final class ProfileEditViewController: UITableViewController {
         case .button(let name):
             let cell: ActionButtonTableViewCell = tableView.dequeueReusableCell(for: indexPath)
             cell.setUp(with: name) { [weak self] in
+                AnalyticsEvents.ProfileEdit.logOut.send()
                 self?.authService.logout()
             }
             return cell

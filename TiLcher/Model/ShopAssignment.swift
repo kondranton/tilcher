@@ -1,57 +1,52 @@
-struct ShopAssignment {
-    struct Rewards {
-        let pointsForLook: Int
-        let comission: Double
-    }
+struct ShopAssignment: Codable {
+    let shop: Shop
+    var assignment: Assignment
 
-    enum Stage {
-        case assign
-        case accept
-        case finish
-        case rejected
+    enum Stage: String, Codable {
+        //        assigned, assignment_accepted, completed_review_pending, completed_review_approved, completed_review_rejected
+        case assigned
+        case assignmentAccepted = "assignment_accepted"
+        case completedPending = "completed_review_pending"
+        case completedApproved = "completed_review_approved"
+        case completedRejected = "completed_review_rejected"
 
         var actionTitle: String {
             switch self {
-            case .assign:
+            case .assigned:
                 return "Принять"
-            case .accept:
-                return "Завешить"
-            case .finish:
+            case .assignmentAccepted:
+                return "Завершить"
+            case .completedPending:
                 return "Отменить"
-            case .rejected:
-                return "Заполнить заново"
+            case .completedApproved:
+                return ""
+            case .completedRejected:
+                return "Переподать"
             }
         }
     }
 
-    var stage: Stage
-    let shop: Shop
-    let rewards: Rewards
-
+    struct Rewards {
+        let pointsForLook: Int
+        let comission: Int
+    }
 
     static let mock = ShopAssignment(
-        stage: .assign,
         shop: Shop(
+            id: 11111,
             name: "Forest",
-            type: "Российские дизайнеры",
-            clothesType: "Одежда/обувь/аксессуары",
-            instagram: "forest_store_krd",
-            imagePath: "https://pp.userapi.com/c630330/v630330771/8f99/4vYc79boVEI.jpg?ava=1",
-            places: [
-                Shop.Place(
-                    location: Coordinate(latitude: 55.77, longitude: 37.563_183),
-                    address: "Пятяковский переулок, метро Никудышкино"
-                ),
-                Shop.Place(
-                    location: Coordinate(latitude: 55.790_080, longitude: 37.563_183),
-                    address: "Ленинградский проспект, метро Динамо"
-                )
-            ],
-            digitalStatus: .online
+            instagramUsername: "forest_store_krd",
+            type: .offline,
+            goodsCategories: [],
+            shopCategories: [],
+            locations: [],
+            image: nil
         ),
-        rewards: ShopAssignment.Rewards(
-            pointsForLook: 5,
-            comission: 15
+        assignment: Assignment(
+            id: 111,
+            cashback: 10,
+            points: 5,
+            status: .assigned
         )
     )
 }

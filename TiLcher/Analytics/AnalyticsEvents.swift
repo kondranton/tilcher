@@ -17,6 +17,7 @@ enum AnalyticsEvents {
     }
 
     enum Auth {
+        static let opened = AnalyticsEvent(name: "Auth opened")
         static let validPhoneEntered = AnalyticsEvent(name: "Valid phone entered")
         static func loginTapped(success: Bool) -> AnalyticsEvent {
             return AnalyticsEvent(
@@ -40,13 +41,12 @@ enum AnalyticsEvents {
     enum ProfileReview {
         static let open = AnalyticsEvent(name: "Open Profile Review")
         static let activeButtonTap = AnalyticsEvent(name: "Profile Review Active Button Tap")
-        static let logout = AnalyticsEvent(name: "Logout")
+        static let logout = AnalyticsEvent(name: "Profile Review Logout")
     }
 
-    enum Profile {
-        static let changeName = AnalyticsEvent(name: "Changed Profile Name")
-        static let changeInstagram = AnalyticsEvent(name: "Changed Profile Instagram")
-        static let changePhoto = AnalyticsEvent(name: "Changed Profile Photo")
+    enum ProfileEdit {
+        static let open = AnalyticsEvent(name: "Profile Edit Opened")
+        static let logOut = AnalyticsEvent(name: "Profile Edit Logout")
     }
 
     enum Shops {

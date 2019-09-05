@@ -17,3 +17,19 @@ extension NewUserProfile {
         )
     }
 }
+
+struct EditableUserProfile {
+    var name: String
+    var instagramUsername: String
+    var image: RemoteImage?
+}
+
+extension EditableUserProfile {
+    init(profile: StylistProfile) {
+        self.init(
+            name: profile.name,
+            instagramUsername: profile.instagramUsername ?? "",
+            image: profile.profilePhoto
+        )
+    }
+}

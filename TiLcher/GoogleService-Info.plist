@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>270490270882-p6lbcugrd5e5j0drnv3t59es0h29h40h.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.270490270882-p6lbcugrd5e5j0drnv3t59es0h29h40h</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>270490270882-3v4f3bhp1jje9rnm70vsboq025nt5rll.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCcPTikhwhTzyYbqPKFrM3LX4f90wBWbRU</string>
+	<key>GCM_SENDER_ID</key>
+	<string>270490270882</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.tilcher.app</string>
+	<key>PROJECT_ID</key>
+	<string>tilcher</string>
+	<key>STORAGE_BUCKET</key>
+	<string>tilcher.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:270490270882:ios:3baf096186f2ce91</string>
+	<key>DATABASE_URL</key>
+	<string>https://tilcher.firebaseio.com</string>
+</dict>
+</plist>

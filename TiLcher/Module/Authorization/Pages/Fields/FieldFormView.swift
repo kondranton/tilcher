@@ -13,6 +13,15 @@ final class FieldFormView: AuthFormView {
         return navigationView
     }()
 
+    var isNextEnabled: Bool {
+        get {
+            return navigationView.isNextEnabled
+        }
+        set {
+            navigationView.isNextEnabled = newValue
+        }
+    }
+
     init(
         onEditingChange: @escaping EditingChangeHandler,
         onNextTap: @escaping () -> Void,
@@ -33,8 +42,9 @@ final class FieldFormView: AuthFormView {
         addSubview(navigationView)
         navigationView.snp.makeConstraints { make in
             make.top.equalTo(textField.snp.bottom).offset(34)
-            make.centerX.equalToSuperview()
             make.height.equalTo(40)
+            make.leading.equalTo(textField)
+            make.trailing.equalTo(textField)
         }
     }
 }

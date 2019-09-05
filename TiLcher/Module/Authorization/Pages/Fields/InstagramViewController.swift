@@ -5,7 +5,7 @@ final class InstagramFormViewController: UIViewController {
     var onBack: () -> Void
     var onNext: (String) -> Void
 
-    private lazy var subview: FieldFormView = {
+    private lazy var instagramInputView: FieldFormView = {
         FieldFormView(
             onEditingChange: { [weak self] isEditing in
                 self?.onEditingChange(isEditing)
@@ -37,10 +37,17 @@ final class InstagramFormViewController: UIViewController {
     override func loadView() {
         let view = UIView()
 
-        subview.title = "Твой ник в Instagram?"
-        subview.textField.placeholder = "Ник"
-        view.addSubview(subview)
-        subview.snp.makeConstraints { make in
+        instagramInputView.title = "Твой ник в Instagram?"
+        instagramInputView.isNextEnabled = false
+        instagramInputView.textField.placeholder = "Ник"
+        instagramInputView.textField.addTarget(
+            self,
+            action: #selector(textChanged),
+            for: .allEditingEvents
+        )
+
+        view.addSubview(instagramInputView)
+        instagramInputView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
 
@@ -48,9 +55,14 @@ final class InstagramFormViewController: UIViewController {
     }
 
     private func nextTap() {
-        guard let text = subview.textField.text else {
+        guard let text = instagramInputView.textField.text else {
             return
         }
         onNext(text)
+    }
+
+    @objc
+    private func textChanged() {
+        instagramInputView.isNextEnabled = !(instagramInputView.textField.text?.isEmpty ?? true)
     }
 }

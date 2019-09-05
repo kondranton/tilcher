@@ -6,8 +6,10 @@ final class EditPhotoTableViewCell: UITableViewCell, ViewReusable {
         return view
     }()
 
-    func setUp(with url: URL, takePhoto: @escaping () -> Void) {
-        photoView.load(from: url)
+    func setUp(with url: String, takePhoto: @escaping () -> Void) {
+        if let url = URL(string: url) {
+            photoView.load(from: url)
+        }
         photoView.onTouch = takePhoto
     }
 

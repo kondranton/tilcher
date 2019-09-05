@@ -27,7 +27,7 @@ final class CodeRequestViewController: UIViewController {
                 self?.logIn()
             },
             onBecomeStylistTap: { [weak self] in
-                guard let url = URL(string: "https://tilcher.com") else {
+                guard let url = URL(string: "https://tilcher.ru/terms") else {
                     return
                 }
                 self?.onBecomeStylistTap(url)
@@ -71,8 +71,10 @@ final class CodeRequestViewController: UIViewController {
             .requestCode(to: phone)
             .done(on: .main) { verifier in
                 self.sentCode(verifier)
+                AnalyticsEvents.Auth.loginTapped(success: true).send()
             }
             .catch { error in
+                AnalyticsEvents.Auth.loginTapped(success: false).send()
                 if let error = error as? APIError {
                     if error.code == "invalid" {
                         self.onError("Такого номера телефона не существует")
@@ -97,5 +99,9 @@ extension CodeRequestViewController: MaskedTextFieldDelegateListener {
     ) {
         phone = "+7" + value
         authView.isLoginEnabled = complete
+
+        if complete {
+            AnalyticsEvents.Auth.validPhoneEntered.send()
+        }
     }
 }

@@ -16,7 +16,6 @@ final class AuthNavigationView: UIView {
             ),
             for: .normal
         )
-        button.contentEdgeInsets = UIEdgeInsets(top: 4, left: 30, bottom: 4, right: 30)
         button.addTarget(self, action: #selector(backTap), for: .touchUpInside)
 
         return button
@@ -37,11 +36,24 @@ final class AuthNavigationView: UIView {
         button.backgroundColor = .mainColor
         button.layer.cornerRadius = 20
         button.layer.masksToBounds = true
-        button.contentEdgeInsets = UIEdgeInsets(top: 4, left: 54, bottom: 4, right: 54)
         button.addTarget(self, action: #selector(nextTap), for: .touchUpInside)
 
         return button
     }()
+
+    var isNextEnabled: Bool {
+        get {
+            return nextButton.isEnabled
+        }
+        set {
+            nextButton.isEnabled = newValue
+            if newValue {
+                nextButton.backgroundColor = .mainColor
+            } else {
+                nextButton.backgroundColor = .backgroundColor
+            }
+        }
+    }
 
     init(
         onNextTap: @escaping () -> Void,
@@ -87,6 +99,7 @@ final class AuthNavigationView: UIView {
                 make.leading.equalToSuperview()
                 make.bottom.equalToSuperview()
                 make.top.equalToSuperview()
+                make.width.equalTo(nextButton)
                 make.trailing.equalTo(nextButton.snp.leading)
             }
         }

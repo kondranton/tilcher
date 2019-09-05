@@ -6,7 +6,7 @@ final class PhotoEditView: UIView {
 
     var imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.backgroundColor = .green
+        imageView.backgroundColor = .infoGrayColor
         return imageView
     }()
 

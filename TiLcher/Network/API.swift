@@ -49,7 +49,7 @@ final class API<Endpoint: APIEndpoint> {
                         let mappedResponse = try decoder.decode(ResultType.self, from: data)
                         seal.fulfill(mappedResponse)
                     } catch {
-                        assertionFailure("Bad data")
+                        assertionFailure(error.localizedDescription)
                     }
                 }
             }

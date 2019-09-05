@@ -42,16 +42,19 @@ final class CodeRequestView: AuthFormView {
 
     private lazy var becomeStylistButton: UIButton = {
         let button = UIButton()
-        button.setAttributedTitle(
-            NSAttributedString(
-                string: "Стать стилистом в Tilcher",
-                attributes: [
-                    .font: UIFont.systemFont(ofSize: 17, weight: .bold),
-                    .foregroundColor: UIColor.mainColor
-                ]
-            ),
-            for: .normal
+        let title = "Нажав \"Войти\", ты соглашаешься с условиями использования сервиса TiLcher"
+        let range = (title as NSString).range(of: "с условиями")
+        let attributedTitle = NSMutableAttributedString(
+            string: title,
+            attributes: [
+                .font: UIFont.systemFont(ofSize: 15, weight: .regular),
+                .foregroundColor: UIColor.white
+            ]
         )
+        attributedTitle.addAttribute(.foregroundColor, value: UIColor.mainColor, range: range)
+        button.setAttributedTitle(attributedTitle, for: .normal)
+        button.titleLabel?.numberOfLines = 0
+        button.titleLabel?.textAlignment = .center
         button.addTarget(self, action: #selector(beacomeStylist), for: .touchUpInside)
 
         return button
@@ -89,9 +92,10 @@ final class CodeRequestView: AuthFormView {
         }
 
         becomeStylistButton.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
             make.top.equalTo(loginButton.snp.bottom).offset(34)
             make.bottom.equalToSuperview().offset(-48)
+            make.leading.equalToSuperview().offset(30)
+            make.trailing.equalToSuperview().offset(-30)
         }
     }
 

@@ -2,9 +2,9 @@ import Foundation
 import Alamofire
 
 enum ShopsEndpoint {
-    case getAssigned(page: Int, token: String)
-    case acceptAssignment(id: String, token: String)
-    case completeAssignment(id: String, token: String)
+    case getAssigned(token: String)
+    case acceptAssignment(id: Int, token: String)
+    case completeAssignment(id: Int, shopReviewResults: ShopReviewResults, token: String)
 }
 
 extension ShopsEndpoint: APIEndpoint {
@@ -17,7 +17,7 @@ extension ShopsEndpoint: APIEndpoint {
 
     var path: String {
         switch self {
-        case .getAssigned(let page, _):
+        case .getAssigned:
             return "/assigned/"
         case .acceptAssignment:
             return "/accept_assignment/"
@@ -37,8 +37,8 @@ extension ShopsEndpoint: APIEndpoint {
 
     var headers: [String: String] {
         switch self {
-        case .getAssigned(_, let token), .acceptAssignment(_, let token),
-             .completeAssignment(_, let token):
+        case .getAssigned(let token), .acceptAssignment(_, let token),
+             .completeAssignment(_, _, let token):
             return [
                 "Authorization": "JWT \(token)"
             ]
@@ -49,9 +49,17 @@ extension ShopsEndpoint: APIEndpoint {
         switch self {
         case .getAssigned:
             return [:]
-        case .acceptAssignment(let id, _), .completeAssignment(let id, _):
+        case .acceptAssignment(let id, _):
             return [
                 "shop_assignment_id": id
+            ]
+        case .completeAssignment(let id, let results, _):
+            return [
+                "shop_assignment_id": id,
+                "looks_count": results.looks,
+                "collages_count": results.collages,
+                "stories_count": results.stories,
+                "posts_count": results.posts
             ]
         }
     }

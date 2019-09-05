@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>rubles</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@rubles1@</string>
+		<key>rubles1</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>zero</key>
+			<string>рублей</string>
+			<key>one</key>
+			<string>рубль</string>
+			<key>two</key>
+			<string>рубля</string>
+			<key>few</key>
+			<string>рубля</string>
+			<key>many</key>
+			<string>рублей</string>
+			<key>other</key>
+			<string>рублей</string>
+		</dict>
+	</dict>
+	<key>points</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@points1@</string>
+		<key>points1</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>zero</key>
+			<string>баллов</string>
+			<key>one</key>
+			<string>балл</string>
+			<key>two</key>
+			<string>балла</string>
+			<key>few</key>
+			<string>балла</string>
+			<key>many</key>
+			<string>баллов</string>
+			<key>other</key>
+			<string>баллов</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

@@ -1,5 +1,7 @@
 platform :ios, '10.0'
 
+inhibit_all_warnings!
+
 target 'TiLcher' do
   use_frameworks!
 
@@ -31,6 +33,11 @@ target 'TiLcher' do
 
   #Google
   pod 'GoogleMaps', '3.3.0'
+
+  # Firebase
+  pod 'Fabric', '1.10.2'
+  pod 'Crashlytics', '3.13.4'
+  pod 'Firebase/Analytics', '6.1.0'
 
   pod 'NVActivityIndicatorView', '4.7.0'
  

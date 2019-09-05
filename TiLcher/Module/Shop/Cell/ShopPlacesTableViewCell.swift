@@ -40,8 +40,8 @@ final class ShopPlacesTableViewCell: UnderlayedTableViewCell {
         let bounds = mapBounds(
             including: models.map {
                 CLLocationCoordinate2D(
-                    latitude: $0.location.latitude,
-                    longitude: $0.location.longitude
+                    latitude: $0.point.latitude,
+                    longitude: $0.point.longitude
                 )
             }
         )
@@ -54,8 +54,8 @@ final class ShopPlacesTableViewCell: UnderlayedTableViewCell {
         for model in models {
             let marker = GMSMarker()
             marker.position = CLLocationCoordinate2D(
-                latitude: model.location.latitude,
-                longitude: model.location.longitude
+                latitude: model.point.latitude,
+                longitude: model.point.longitude
             )
 
             marker.map = mapView
@@ -114,6 +114,7 @@ final class ShopPlacesTableViewCell: UnderlayedTableViewCell {
 
 extension ShopPlacesTableViewCell: GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
+        AnalyticsEvents.Shop.markerTap.send()
         // view related selection
         if let selectedMarker = mapView.selectedMarker {
             selectedMarker.icon = UIImage(named: "pin")

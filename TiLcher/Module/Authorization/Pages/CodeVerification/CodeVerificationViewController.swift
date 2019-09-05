@@ -81,6 +81,7 @@ final class CodeVerificationViewController: UIViewController {
         )
         .done { authResult in
             self.onNext(authResult)
+            AnalyticsEvents.Auth.nextTapped(success: true, screen: .code).send()
         }
         .catch { error in
             AnalyticsEvents.Auth.nextTapped(success: false, screen: .code).send()

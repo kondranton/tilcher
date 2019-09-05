@@ -25,6 +25,13 @@ final class ResultsTableViewCell: HeaderedTableViewCell {
         return view
     }()
 
+    func setUp(with model: AssignmentResultsViewModel) {
+        looksView.onTextChange = model.looksChangeString
+        collagesView.onTextChange = model.collagesChangeString
+        storiesView.onTextChange = model.storiesChangeString
+        postsView.onTextChange = model.postsChangeString
+    }
+
     override func setUp() {
         super.setUp()
         headerLabel.text = "Введи данные для рейтинга"

@@ -21,43 +21,15 @@ final class UserTypeView: UIView {
         return view
     }()
 
-    lazy var nextButton: UIButton = {
-        let button = UIButton()
-        button.setAttributedTitle(
-            NSAttributedString(
-                string: "Далее",
-                attributes: [
-                    .font: UIFont.systemFont(ofSize: 17, weight: .bold),
-                    .foregroundColor: UIColor.black
-                ]
-            ),
-            for: .normal
+    private lazy var navigationView: AuthNavigationView = {
+        let navigationView = AuthNavigationView(
+            onNextTap: { [weak self] in
+                self?.nextTap()
+            },
+            onBackTap: onBackTap
         )
-        button.backgroundColor = .mainColor
-        button.layer.cornerRadius = 20
-        button.layer.masksToBounds = true
-        button.contentEdgeInsets = UIEdgeInsets(top: 4, left: 54, bottom: 4, right: 54)
-        button.addTarget(self, action: #selector(nextTap), for: .touchUpInside)
 
-        return button
-    }()
-
-    lazy var backButton: UIButton = {
-        let button = UIButton()
-        button.setAttributedTitle(
-            NSAttributedString(
-                string: "Назад",
-                attributes: [
-                    .font: UIFont.systemFont(ofSize: 17, weight: .bold),
-                    .foregroundColor: UIColor.white
-                ]
-            ),
-            for: .normal
-        )
-        button.contentEdgeInsets = UIEdgeInsets(top: 4, left: 30, bottom: 4, right: 30)
-        button.addTarget(self, action: #selector(backTap), for: .touchUpInside)
-
-        return button
+        return navigationView
     }()
 
     init(
@@ -83,11 +55,6 @@ final class UserTypeView: UIView {
         onNextTap(switchView.isRightSelected ? 1 : 0)
     }
 
-    @objc
-    private func backTap() {
-        onBackTap()
-    }
-
     func setUp() {
         backgroundColor = .blackTransparentColor
         layer.cornerRadius = 20
@@ -98,13 +65,9 @@ final class UserTypeView: UIView {
         [
             titleLabel,
             switchView,
-            nextButton,
-            backButton
+            navigationView
         ]
         .forEach(addSubview)
-
-        let buttonsLayoutGuide = UILayoutGuide()
-        addLayoutGuide(buttonsLayoutGuide)
 
         titleLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(32)
@@ -118,23 +81,12 @@ final class UserTypeView: UIView {
             make.centerY.equalToSuperview().offset(-32)
         }
 
-        buttonsLayoutGuide.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
+        navigationView.snp.makeConstraints { make in
             make.top.equalTo(switchView.snp.bottom).offset(34)
+            make.centerX.equalToSuperview()
             make.height.equalTo(40)
-        }
-
-        nextButton.snp.makeConstraints { make in
-            make.trailing.equalTo(buttonsLayoutGuide)
-            make.top.equalTo(buttonsLayoutGuide)
-            make.bottom.equalTo(buttonsLayoutGuide)
-        }
-
-        backButton.snp.makeConstraints { make in
-            make.leading.equalTo(buttonsLayoutGuide)
-            make.bottom.equalTo(buttonsLayoutGuide)
-            make.top.equalTo(buttonsLayoutGuide)
-            make.trailing.equalTo(nextButton.snp.leading)
+            make.leading.equalToSuperview().offset(20)
+            make.trailing.equalToSuperview().offset(-20)
         }
     }
 }

@@ -35,8 +35,11 @@ final class ShopReviewInfoTableViewCell: UnderlayedTableViewCell {
     var onInstagramTap: (() -> Void)?
 
     func setUp(with model: Shop, onInstagramTap: @escaping () -> Void) {
-        shopTypeLabel.text = model.type
-        clothesTypeLabel.text = model.clothesType
+        shopTypeLabel.text = model.shopCategories.first?.displayValue
+        clothesTypeLabel.text = (model.goodsCategories
+            .compactMap { $0.displayValue })
+            .joined(separator: "/")
+            .lowercased()
         self.onInstagramTap = onInstagramTap
     }
 

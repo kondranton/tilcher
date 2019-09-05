@@ -3,7 +3,7 @@ import PromiseKit
 
 protocol ProfileServiceProtocol {
     func fetchProfile() -> Promise<StylistProfile>
-    func updateProfile(data: NewUserProfile) -> Promise<Void>
+    func updateProfile(data: EditableUserProfile) -> Promise<Void>
 }
 
 enum FetchProfileError: String, Error {
@@ -47,7 +47,7 @@ final class ProfileService: ProfileServiceProtocol {
         }
     }
 
-    func updateProfile(data: NewUserProfile) -> Promise<Void> {
+    func updateProfile(data: EditableUserProfile) -> Promise<Void> {
         guard
             let token = keychainService.fetchAccessToken()
         else {

@@ -4,7 +4,7 @@ final class NameAuthViewController: UIViewController {
     var onEditingChange: EditingChangeHandler
     var onNext: (String) -> Void
 
-    private lazy var subview: FieldFormView = {
+    private lazy var nameInputView: FieldFormView = {
         FieldFormView(
             onEditingChange: { [weak self] isEditing in
                 self?.onEditingChange(isEditing)
@@ -31,20 +31,31 @@ final class NameAuthViewController: UIViewController {
     override func loadView() {
         let view = UIView()
 
-        subview.title = "Как тебя зовут?"
-        subview.textField.placeholder = "Имя"
-        view.addSubview(subview)
-        subview.snp.makeConstraints { make in
+        nameInputView.title = "Как тебя зовут?"
+        nameInputView.textField.placeholder = "Имя"
+        view.addSubview(nameInputView)
+        nameInputView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+        nameInputView.isNextEnabled = false
+        nameInputView.textField.addTarget(
+            self,
+            action: #selector(textChanged),
+            for: .allEditingEvents
+        )
 
         self.view = view
     }
 
     private func nextTap() {
-        guard let text = subview.textField.text else {
+        guard let text = nameInputView.textField.text else {
             return
         }
         onNext(text)
+    }
+
+    @objc
+    private func textChanged() {
+        nameInputView.isNextEnabled = !(nameInputView.textField.text?.isEmpty ?? true)
     }
 }

@@ -3,21 +3,20 @@ import Foundation
 struct ShopItemViewModel {
     let name: String
     let type: String
-    let imagePath: String
+    let imageUrl: URL?
     let pointsForLook: String
-
-    var imageUrl: URL? {
-        return URL(string: imagePath)
-    }
 }
 
 extension ShopItemViewModel {
     init(shopReview: ShopAssignment) {
         self.init(
             name: shopReview.shop.name,
-            type: shopReview.shop.clothesType,
-            imagePath: shopReview.shop.imagePath,
-            pointsForLook: "\(shopReview.rewards.pointsForLook)"
+            type: (shopReview.shop.goodsCategories
+                .compactMap { $0.displayValue })
+                .joined(separator: "/")
+                .lowercased(),
+            imageUrl: shopReview.shop.imageUrl,
+            pointsForLook: "\(shopReview.assignment.points)"
         )
     }
 }

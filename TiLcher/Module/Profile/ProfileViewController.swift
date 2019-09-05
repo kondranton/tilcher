@@ -14,12 +14,20 @@ final class ProfileViewController: UIViewController {
         return view
     }()
 
+    private lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = SpinnerRefreshControl()
+        refreshControl.addTarget(self, action: #selector(fetchProfile), for: .valueChanged)
+        return refreshControl
+    }()
+
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.backgroundColor = .clear
         tableView.separatorStyle = .none
         tableView.showsVerticalScrollIndicator = false
         tableView.dataSource = self
+        tableView.refreshControl = self.refreshControl
+
         tableView.register(cellClass: ProfileHeaderTableViewCell.self)
         tableView.register(cellClass: ProfileItemTableViewCell.self)
         return tableView
@@ -35,7 +43,7 @@ final class ProfileViewController: UIViewController {
                     money: profile.balance.cashback,
                     points: profile.balance.score,
                     name: profile.name,
-                    imagePath: "" // profile.imagePath
+                    imagePath: profile.profilePhoto?.url ?? ""
                 )
             ),
             .statistics(
@@ -55,19 +63,20 @@ final class ProfileViewController: UIViewController {
                     itemType: .shops,
                     value: statistics.shops
                 )
-            ),
-            .statistics(
-                ProfileStatisticsItemModel(
-                    itemType: .clients,
-                    value: statistics.clients
-                )
-            ),
-            .statistics(
-                ProfileStatisticsItemModel(
-                    itemType: .usersInvited,
-                    value: statistics.invitedUsers
-                )
             )
+            // uncomment when these 2 fields will have sense
+//            .statistics(
+//                ProfileStatisticsItemModel(
+//                    itemType: .clients,
+//                    value: statistics.clients
+//                )
+//            ),
+//            .statistics(
+//                ProfileStatisticsItemModel(
+//                    itemType: .usersInvited,
+//                    value: statistics.invitedUsers
+//                )
+//            )
         ]
     }
 
@@ -75,19 +84,19 @@ final class ProfileViewController: UIViewController {
         self.profile = StylistProfile(
             id: 2,
             phone: "",
-            name: "Татьяна Ильчишина",
+            name: "",
             type: .stylist,
             reviewStatus: .approved,
-            instagramUsername: "tanya_tilcha",
+            instagramUsername: "",
             counts: StylistProfile.Statistics(
-                looks: 25,
-                instagramPosts: 48,
-                shops: 20,
-                clients: 3,
-                invitedUsers: 1200
+                looks: 0,
+                instagramPosts: 0,
+                shops: 0,
+                clients: 0,
+                invitedUsers: 0
             ),
-            balance: StylistProfile.Balance(score: 1200, cashback: 1302)//,
-//            imagePath: "https://www.vsh.is/images/carousel/liekarusel/liekaruselsss.jpg"
+            balance: StylistProfile.Balance(score: 0, cashback: 0),
+            profilePhoto: RemoteImage(id: "", url: "")
         )
         self.profileService = profileService
         super.init(nibName: nil, bundle: nil)
@@ -121,6 +130,11 @@ final class ProfileViewController: UIViewController {
         self.view = view
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        fetchProfile()
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.setRightBarButton(
@@ -132,7 +146,6 @@ final class ProfileViewController: UIViewController {
             ),
             animated: false
         )
-        fetchProfile()
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(fetchProfile),
@@ -151,6 +164,11 @@ final class ProfileViewController: UIViewController {
         .catch { error in
             assertionFailure(error.localizedDescription)
         }
+        .finally {
+            CATransaction.setCompletionBlock { [weak self] in
+                self?.refreshControl.endRefreshing()
+            }
+        }
     }
 
     func configure(with profile: StylistProfile) {
@@ -159,7 +177,7 @@ final class ProfileViewController: UIViewController {
     @objc
     func openSettings() {
         let profileEditViewController = ProfileEditViewController(
-            profile: NewUserProfile(profile: profile),
+            profile: EditableUserProfile(profile: profile),
             profileService: profileService
         )
         let navigationController = UINavigationController()

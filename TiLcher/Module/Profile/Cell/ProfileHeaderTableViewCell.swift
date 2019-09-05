@@ -1,17 +1,32 @@
 import UIKit
+import Nuke
 
 class ProfileHeaderTableViewCell: UITableViewCell, ViewReusable {
     func setUp(with model: ProfileHeaderItemModel) {
         moneyLabel.text = "\(model.money)"
+        moneyNoteLabel.text = String.localizedStringWithFormat(
+            NSLocalizedString("rubles", comment: ""),
+            model.money
+        )
         pointsLabel.text = "\(model.points)"
+        pointsNoteLabel.text = String.localizedStringWithFormat(
+            NSLocalizedString("points", comment: ""),
+            model.points
+        )
         nameLabel.text = model.name
+
+        if let url = model.imageURL {
+            Nuke.loadImage(with: url, into: photoImageView)
+        }
     }
 
     private var photoImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.backgroundColor = .green
+        imageView.backgroundColor = .infoGrayColor
         imageView.layer.masksToBounds = true
         imageView.layer.cornerRadius = 68
+        imageView.layer.borderWidth = 1
+        imageView.layer.borderColor = UIColor.white.cgColor
         return imageView
     }()
 

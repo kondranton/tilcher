@@ -61,6 +61,7 @@ final class ShopTableViewCell: UnderlayedTableViewCell {
         imageView.layer.cornerRadius = 23
         imageView.layer.masksToBounds = true
         imageView.contentMode = .scaleAspectFit
+        imageView.backgroundColor = .backgroundColor
         return imageView
     }()
 
@@ -73,6 +74,7 @@ final class ShopTableViewCell: UnderlayedTableViewCell {
     private var typeLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 10, weight: .regular)
+        label.numberOfLines = 2
         return label
     }()
 
@@ -131,8 +133,9 @@ final class ShopTableViewCell: UnderlayedTableViewCell {
         }
 
         typeLabel.snp.makeConstraints { make in
-            make.top.equalTo(nameLabel.snp.bottom).offset(2)
+            make.top.equalTo(nameLabel.snp.bottom).offset(4)
             make.leading.equalTo(nameLabel.snp.leading)
+            make.trailing.equalTo(pointsLabel.snp.leading).offset(-8)
         }
     }
 }

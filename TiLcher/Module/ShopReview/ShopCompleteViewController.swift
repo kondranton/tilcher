@@ -8,12 +8,29 @@ struct ShopReviewResults {
     var review: String = ""
 }
 
-final class ShopReviewResultsViewController: UITableViewController {
+final class ShopCompleteViewController: UITableViewController {
     private let instagramService = InstagramService()
+    private let shopService = ShopsService(keychainService: KeychainService())
 
+    let assignment: ShopAssignment
     var shopReview = ShopReviewResults()
 
-    init() {
+    private var viewModel: ShopAssignmentResultsViewModel {
+        return ShopAssignmentResultsViewModel(
+            counts: AssignmentResultsViewModel(
+                looksChange: { self.shopReview.looks = $0 },
+                collagesChange: { self.shopReview.collages = $0 },
+                storiesChange: { self.shopReview.stories = $0 },
+                postsChange: { self.shopReview.posts = $0 }
+            ),
+            report: AssignmentReportViewModel(
+                textChanged: { self.shopReview.review = $0 }
+            )
+        )
+    }
+
+    init(assignment: ShopAssignment) {
+        self.assignment = assignment
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -48,6 +65,7 @@ final class ShopReviewResultsViewController: UITableViewController {
         switch indexPath.row {
         case 0:
             let cell: ResultsTableViewCell = tableView.dequeueReusableCell(for: indexPath)
+            cell.setUp(with: viewModel.counts)
             return cell
         case 1:
             let cell: ReviewTableViewCell = tableView.dequeueReusableCell(for: indexPath)
@@ -55,7 +73,7 @@ final class ShopReviewResultsViewController: UITableViewController {
         case 2:
             let cell: ActionButtonTableViewCell = tableView.dequeueReusableCell(for: indexPath)
             cell.setUp(with: "Отправить") { [weak self] in
-                self?.navigationController?.popToRootViewController(animated: true)
+                self?.send()
             }
             return cell
         default:
@@ -65,5 +83,17 @@ final class ShopReviewResultsViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
         return false
+    }
+
+    func send() {
+        AnalyticsEvents.ShopReview.sent.send()
+        shopService
+            .complete(assignment: assignment, shopReviewResult: shopReview)
+            .done {
+                self.navigationController?.popToRootViewController(animated: true)
+            }
+            .catch { error in
+                assertionFailure(error.localizedDescription)
+            }
     }
 }

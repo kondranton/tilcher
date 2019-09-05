@@ -3,6 +3,7 @@ import SnapKit
 
 final class ShopViewController: UIViewController, SFViewControllerPresentable {
     private let instagramService = InstagramService()
+    private let shopsService = ShopsService(keychainService: KeychainService())
 
     var shopReview: ShopAssignment
 
@@ -10,15 +11,58 @@ final class ShopViewController: UIViewController, SFViewControllerPresentable {
         case info(Shop)
         case rewards(ShopAssignment.Rewards)
         case places([Shop.Place])
+        case banner(String)
         case actionButton(ShopAssignment.Stage)
     }
 
-    lazy var fields: [ShopReviewField] = [
-        .info(shopReview.shop),
-        .rewards(shopReview.rewards),
-        .places(shopReview.shop.places),
-        .actionButton(shopReview.stage)
-    ]
+    var fields: [ShopReviewField] {
+        if shopReview.assignment.status == .completedPending {
+            return [
+                .banner("Отправленная тобой статистика по обзору будет проверена командой Tilcher в течение суток.")
+            ]
+        }
+
+        if shopReview.assignment.status == .completedApproved {
+            return [
+                .banner("Твой обзор успешно завершен! Начисленные баллы можно видеть в профиле.")
+            ]
+        }
+
+        if shopReview.assignment.status == .completedRejected {
+            return [
+                .banner("Отправленная тобой статистика по обзору была отклонена из-за неточностей")
+            ]
+        }
+
+        switch shopReview.shop.type {
+        case .online:
+            return [
+                .info(shopReview.shop),
+                .rewards(
+                    ShopAssignment.Rewards(
+                        pointsForLook: shopReview.assignment.points,
+                        comission: shopReview.assignment.cashback
+                    )
+                ),
+                // swiftlint:disable line_length
+                .banner("Это онлайн магазинин, его посещать не надо. Переходи в Инстаграм магазина, выбирай фото, дополняй луки или делай интересные подборки/коллажи в формате своего контента 😉"),
+                // swiftlint:enable line_length
+                .actionButton(shopReview.assignment.status)
+            ]
+        case .offline:
+            return [
+                .info(shopReview.shop),
+                .rewards(
+                    ShopAssignment.Rewards(
+                        pointsForLook: shopReview.assignment.points,
+                        comission: shopReview.assignment.cashback
+                    )
+                ),
+                .places(shopReview.shop.locations),
+                .actionButton(shopReview.assignment.status)
+            ]
+        }
+    }
 
     lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -26,6 +70,7 @@ final class ShopViewController: UIViewController, SFViewControllerPresentable {
         tableView.register(cellClass: ShopReviewInfoTableViewCell.self)
         tableView.register(cellClass: ShopRewardsTableViewCell.self)
         tableView.register(cellClass: ShopPlacesTableViewCell.self)
+        tableView.register(cellClass: BannerTableViewCell.self)
         tableView.register(cellClass: ActionButtonTableViewCell.self)
 
         tableView.dataSource = self
@@ -60,15 +105,44 @@ final class ShopViewController: UIViewController, SFViewControllerPresentable {
         title = shopReview.shop.name
     }
 
+    func actionFired() {
+        switch shopReview.assignment.status {
+        case .assigned:
+            accept()
+            AnalyticsEvents.Shop.acceptedTap.send()
+        case .assignmentAccepted:
+            AnalyticsEvents.Shop.finishedTap.send()
+            openReport()
+        case .completedApproved:
+            break
+        case .completedPending:
+            break
+        case .completedRejected:
+            break
+        }
+    }
+
+    func accept() {
+        shopsService.accept(assignment: shopReview)
+            .done {
+                self.shopReview.assignment.status = .assignmentAccepted
+                self.tableView.reloadData()
+                NotificationCenter.default.post(name: .assignmentsChanged, object: nil)
+            }
+            .catch { error in
+                assertionFailure(error.localizedDescription)
+            }
+    }
+
     func openReport() {
-        let reportViewController = ShopReviewResultsViewController()
+        let reportViewController = ShopCompleteViewController(assignment: self.shopReview)
         show(reportViewController, sender: nil)
     }
 }
 
 extension ShopViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        return fields.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -82,9 +156,10 @@ extension ShopViewController: UITableViewDataSource {
                     return
                 }
                 self.instagramService.openAccount(
-                    named: shop.instagram,
+                    named: shop.instagramUsername,
                     in: self
                 )
+                AnalyticsEvents.Shop.instagramTap.send()
             }
             return cell
         case let .rewards(rewards):
@@ -95,10 +170,14 @@ extension ShopViewController: UITableViewDataSource {
             let cell: ShopPlacesTableViewCell = tableView.dequeueReusableCell(for: indexPath)
             cell.setUp(with: places)
             return cell
+        case let .banner(text):
+            let cell: BannerTableViewCell = tableView.dequeueReusableCell(for: indexPath)
+            cell.setUp(with: text)
+            return cell
         case let .actionButton(stage):
             let cell: ActionButtonTableViewCell = tableView.dequeueReusableCell(for: indexPath)
             cell.setUp(with: stage.actionTitle) { [weak self] in
-                self?.openReport()
+                self?.actionFired()
             }
             return cell
         }

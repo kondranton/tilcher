@@ -137,7 +137,6 @@ final class AuthorizationViewController: UIViewController, SFViewControllerPrese
                 at: .centeredHorizontally,
                 animated: true
             )
-            AnalyticsEvents.Auth.nextTapped(success: true, screen: .code).send()
             state = .name
         case .name:
             collectionView.scrollToItem(
@@ -233,6 +232,11 @@ final class AuthorizationViewController: UIViewController, SFViewControllerPrese
         self.view = view
     }
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        AnalyticsEvents.Auth.opened.send()
+    }
+
     private func show(errorMessage: String) {
         let alert = UIAlertController(title: "Ошибка", message: errorMessage, preferredStyle: .alert)
         let okAction = UIAlertAction(title: "Ок", style: .default, handler: nil)
@@ -256,7 +260,7 @@ final class AuthorizationViewController: UIViewController, SFViewControllerPrese
         }
         .catch { error in
             AnalyticsEvents.Auth.nextTapped(success: false, screen: .instagram).send()
-            assertionFailure(error.localizedDescription)
+            self.show(errorMessage: error.localizedDescription)
         }
     }
 

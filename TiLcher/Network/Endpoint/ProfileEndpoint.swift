@@ -3,7 +3,7 @@ import Alamofire
 
 enum ProfileEndpoint {
     case get(token: String)
-    case update(profile: NewUserProfile, token: String)
+    case update(profile: EditableUserProfile, token: String)
 }
 
 extension ProfileEndpoint: APIEndpoint {
@@ -46,10 +46,16 @@ extension ProfileEndpoint: APIEndpoint {
         case .get:
             return [:]
         case let .update(profile, _):
-            return [
+            var params = [
                 "name": profile.name,
                 "instagram_username": profile.instagramUsername
             ]
+
+            if let image = profile.image {
+                params["profile_photo_id"] = image.id
+            }
+
+            return params
         }
     }
 

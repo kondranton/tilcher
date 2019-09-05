@@ -27,63 +27,27 @@ final class CodeVerificationView: AuthFormView {
         }
     }
 
-    var isNextEnabled: Bool {
-        get {
-            return nextButton.isEnabled
-        }
-        set {
-            nextButton.isEnabled = newValue
-            if newValue {
-                nextButton.backgroundColor = .mainColor
-            } else {
-                nextButton.backgroundColor = .backgroundColor
-            }
-        }
-    }
-
     private var onNextTap: () -> Void
     private var onBackTap: () -> Void
     private var onResendTap: () -> Void
 
-    lazy var nextButton: UIButton = {
-        let button = UIButton()
-        button.setAttributedTitle(
-            NSAttributedString(
-                string: "Далее",
-                attributes: [
-                    .font: UIFont.systemFont(ofSize: 17, weight: .bold),
-                    .foregroundColor: UIColor.black
-                ]
-            ),
-            for: .normal
+    private lazy var navigationView: AuthNavigationView = {
+        let navigationView = AuthNavigationView(
+            onNextTap: onNextTap,
+            onBackTap: onBackTap
         )
-        button.backgroundColor = .backgroundColor
-        button.isEnabled = false
-        button.layer.cornerRadius = 20
-        button.layer.masksToBounds = true
-        button.contentEdgeInsets = UIEdgeInsets(top: 4, left: 54, bottom: 4, right: 54)
-        button.addTarget(self, action: #selector(nextTap), for: .touchUpInside)
 
-        return button
+        return navigationView
     }()
 
-    lazy var backButton: UIButton = {
-        let button = UIButton()
-        button.setAttributedTitle(
-            NSAttributedString(
-                string: "Назад",
-                attributes: [
-                    .font: UIFont.systemFont(ofSize: 17, weight: .bold),
-                    .foregroundColor: UIColor.white
-                ]
-            ),
-            for: .normal
-        )
-        button.contentEdgeInsets = UIEdgeInsets(top: 4, left: 30, bottom: 4, right: 30)
-        button.addTarget(self, action: #selector(backTap), for: .touchUpInside)
-
-        return button
-    }()
+    var isNextEnabled: Bool {
+        get {
+            return navigationView.isNextEnabled
+        }
+        set {
+            navigationView.isNextEnabled = newValue
+        }
+    }
 
     lazy var resendSmsButton: UIButton = {
         let button = UIButton()
@@ -151,44 +115,29 @@ final class CodeVerificationView: AuthFormView {
         textField.isSecureTextEntry = true
 
         [
-            nextButton,
-            backButton,
             resendNoticeLabel,
-            resendSmsButton
+            resendSmsButton,
+            navigationView
         ]
         .forEach(addSubview)
 
-        let buttonsLayoutGuide = UILayoutGuide()
-        addLayoutGuide(buttonsLayoutGuide)
-
-        buttonsLayoutGuide.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
+        navigationView.snp.makeConstraints { make in
             make.top.equalTo(textField.snp.bottom).offset(34)
+            make.centerX.equalToSuperview()
             make.height.equalTo(40)
-        }
-
-        nextButton.snp.makeConstraints { make in
-            make.trailing.equalTo(buttonsLayoutGuide)
-            make.top.equalTo(buttonsLayoutGuide)
-            make.bottom.equalTo(buttonsLayoutGuide)
-        }
-
-        backButton.snp.makeConstraints { make in
-            make.leading.equalTo(buttonsLayoutGuide)
-            make.bottom.equalTo(buttonsLayoutGuide)
-            make.top.equalTo(buttonsLayoutGuide)
-            make.trailing.equalTo(nextButton.snp.leading)
+            make.leading.equalTo(textField)
+            make.trailing.equalTo(textField)
         }
 
         resendSmsButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(buttonsLayoutGuide.snp.bottom).offset(34)
+            make.top.equalTo(navigationView.snp.bottom).offset(34)
             make.bottom.equalToSuperview().offset(-48)
         }
 
         resendNoticeLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(buttonsLayoutGuide.snp.bottom).offset(34)
+            make.top.equalTo(navigationView.snp.bottom).offset(34)
             make.leading.equalToSuperview().offset(16)
             make.trailing.equalToSuperview().offset(-16)
         }
