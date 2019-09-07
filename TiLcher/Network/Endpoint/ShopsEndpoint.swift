@@ -9,7 +9,7 @@ enum ShopsEndpoint {
 
 extension ShopsEndpoint: APIEndpoint {
     var baseURL: URL {
-        guard let url = URL(string: "https://tilcher-stage.herokuapp.com/api/v1/stylist/shops") else {
+        guard let url = URL(string: Environment.current.baseURL + "stylist/shops") else {
             fatalError("URL should be valid")
         }
         return url

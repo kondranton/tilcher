@@ -106,6 +106,7 @@
 		1BBF2211230A162F00CE9F7C /* ShopCompleteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BBF2210230A162F00CE9F7C /* ShopCompleteViewController.swift */; };
 		1BC27C3C2308724C00372823 /* CodeRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC27C3B2308724C00372823 /* CodeRequestView.swift */; };
 		1BC27C3E2308729E00372823 /* CodeVerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC27C3D2308729E00372823 /* CodeVerificationView.swift */; };
+		1BCCC66523229B5F00AE98A4 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BCCC66423229B5F00AE98A4 /* Environment.swift */; };
 		AEAF60DA579C2BEFEA87B8C3 /* Pods_TiLcher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EF0F961D9FD341B04D05142 /* Pods_TiLcher.framework */; };
 		C410FB3991BBC98FA0F4AEED /* Pods_TiLcherTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E238785DA5803914270BF30 /* Pods_TiLcherTests.framework */; };
 /* End PBXBuildFile section */
@@ -224,6 +225,7 @@
 		1BBF2210230A162F00CE9F7C /* ShopCompleteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopCompleteViewController.swift; sourceTree = "<group>"; };
 		1BC27C3B2308724C00372823 /* CodeRequestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeRequestView.swift; sourceTree = "<group>"; };
 		1BC27C3D2308729E00372823 /* CodeVerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeVerificationView.swift; sourceTree = "<group>"; };
+		1BCCC66423229B5F00AE98A4 /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		1EF0F961D9FD341B04D05142 /* Pods_TiLcher.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TiLcher.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		47C3B2C28C3E98C946C4CCB3 /* Pods-TiLcher.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TiLcher.release.xcconfig"; path = "Target Support Files/Pods-TiLcher/Pods-TiLcher.release.xcconfig"; sourceTree = "<group>"; };
 		4E238785DA5803914270BF30 /* Pods_TiLcherTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TiLcherTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -397,6 +399,7 @@
 				1B5D3F3D23005BA3005F3C77 /* Assets.xcassets */,
 				1B5D3F4223005BA3005F3C77 /* Info.plist */,
 				1B5D3F3623005BA2005F3C77 /* AppDelegate.swift */,
+				1BCCC66423229B5F00AE98A4 /* Environment.swift */,
 				1B4F80CF23214E9F00359A57 /* LaunchScreen.storyboard */,
 				1B4F80CD23214E5100359A57 /* Localizable.stringsdict */,
 				1B15E3592312BC2F00E2170E /* Flow */,
@@ -943,6 +946,7 @@
 				1BA4F915230634EB00D93261 /* AuthFormView.swift in Sources */,
 				1B1A4F4A23146C3900A98F33 /* AnalyticsEvents.swift in Sources */,
 				1B7E1E0F230837C000A7395B /* Verifier.swift in Sources */,
+				1BCCC66523229B5F00AE98A4 /* Environment.swift in Sources */,
 				1B5D3F63230076C5005F3C77 /* MainTabBarController.swift in Sources */,
 				1BBF22042309E12000CE9F7C /* ShopInfoTableViewCell.swift in Sources */,
 				1B42443B231C3290002A3C0D /* AssignmentResultsViewModel.swift in Sources */,

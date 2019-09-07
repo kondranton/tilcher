@@ -9,7 +9,7 @@ class AnalyticsService {
     }
 
     func setupAnalyticsAndStartSession() {
-        Amplitude.instance().initializeApiKey("c468c2d131ee20069397b8521ec40c15")
+        Amplitude.instance().initializeApiKey(Environment.current.amplitudeKey)
 
         let didLaunch = firstLaunchService.didLaunch()
 

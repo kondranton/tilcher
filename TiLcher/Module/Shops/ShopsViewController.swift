@@ -73,16 +73,8 @@ final class ShopsViewController: UITableViewController {
         }
     }
 
-//    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-//        if sections.isEmpty || sections.count == 1 {
-//            return nil
-//        } else {
-//            return sections[section].type.title
-//        }
-//    }
-
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if sections.isEmpty || sections.count == 1 {
+        if sections.isEmpty {
             return nil
         } else {
             let title = sections[section].type.title

@@ -8,7 +8,7 @@ enum ProfileEndpoint {
 
 extension ProfileEndpoint: APIEndpoint {
     var baseURL: URL {
-        guard let url = URL(string: "https://tilcher-stage.herokuapp.com/api/v1/stylist/profile") else {
+        guard let url = URL(string: Environment.current.baseURL + "stylist/profile") else {
             fatalError("URL should be valid")
         }
         return url

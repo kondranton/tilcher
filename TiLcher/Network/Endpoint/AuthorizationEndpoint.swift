@@ -9,7 +9,7 @@ enum AuthorizationEndpoint {
 
 extension AuthorizationEndpoint: APIEndpoint {
     var baseURL: URL {
-        guard let url = URL(string: "https://tilcher-stage.herokuapp.com/api/v1/auth") else {
+        guard let url = URL(string: Environment.current.baseURL + "auth") else {
             fatalError("URL should be valid")
         }
         return url
@@ -39,7 +39,7 @@ extension AuthorizationEndpoint: APIEndpoint {
         case let .requestCode(phone):
             return [
                 "phone": phone,
-                "should_send_sms": false
+                "should_send_sms": Environment.current.shouldSendSMS
             ]
         case let .verify(code, package):
             return [

@@ -5,10 +5,6 @@ final class API<Endpoint: APIEndpoint> {
     public typealias Result = Alamofire.Result
     public typealias APIRequestCompletion = (Alamofire.DataResponse<Any>) -> Void
 
-    struct APIErrors: Codable {
-        let errors: [APIError]
-    }
-
     func request<ResultType: Codable>(endpoint: Endpoint) -> Promise<ResultType> {
         return Promise { seal in
             Alamofire.request(
@@ -82,5 +78,9 @@ final class API<Endpoint: APIEndpoint> {
             }
         }
         .responseJSON(completionHandler: completion)
+    }
+
+    struct APIErrors: Codable {
+        let errors: [APIError]
     }
 }
