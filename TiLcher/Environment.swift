@@ -7,7 +7,7 @@ struct Environment {
 }
 
 extension Environment {
-    static let current: Environment = .production
+    static let current: Environment = .test
 }
 
 extension Environment {

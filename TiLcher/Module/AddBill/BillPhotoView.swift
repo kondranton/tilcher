@@ -1,7 +1,7 @@
 import SnapKit
 import Nuke
 
-final class PhotoEditView: UIView {
+final class BillPhotoEditView: UIView {
     var onTouch: (() -> Void)?
 
     var imageView: UIImageView = {
@@ -34,7 +34,7 @@ final class PhotoEditView: UIView {
     }
 
     func setUp() {
-        layer.cornerRadius = 67.5
+        layer.cornerRadius = 8
         layer.masksToBounds = true
 
         let editUnderlayView = UIView()
@@ -60,8 +60,7 @@ final class PhotoEditView: UIView {
         }
 
         editLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(2)
-            make.centerX.equalToSuperview()
+            make.center.equalToSuperview()
             make.width.equalToSuperview().multipliedBy(0.5)
         }
     }

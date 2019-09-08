@@ -158,7 +158,7 @@ final class ProfileEditViewController: UITableViewController {
             return cell
         case .button(let name):
             let cell: ActionButtonTableViewCell = tableView.dequeueReusableCell(for: indexPath)
-            cell.setUp(with: name) { [weak self] in
+            cell.setUp(with: ActionButtonViewModel(title: name, isEnabled: true)) { [weak self] in
                 AnalyticsEvents.ProfileEdit.logOut.send()
                 self?.authService.logout()
             }

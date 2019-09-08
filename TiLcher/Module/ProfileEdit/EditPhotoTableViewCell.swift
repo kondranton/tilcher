@@ -1,8 +1,8 @@
 import SnapKit
 
 final class EditPhotoTableViewCell: UITableViewCell, ViewReusable {
-    let photoView: PhotoEditView = {
-        let view = PhotoEditView()
+    let photoView: ProfilePhotoEditView = {
+        let view = ProfilePhotoEditView()
         return view
     }()
 

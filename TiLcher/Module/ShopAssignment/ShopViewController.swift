@@ -176,7 +176,9 @@ extension ShopViewController: UITableViewDataSource {
             return cell
         case let .actionButton(stage):
             let cell: ActionButtonTableViewCell = tableView.dequeueReusableCell(for: indexPath)
-            cell.setUp(with: stage.actionTitle) { [weak self] in
+            cell.setUp(
+                with: ActionButtonViewModel(title: stage.actionTitle, isEnabled: true)
+            ) { [weak self] in
                 self?.actionFired()
             }
             return cell

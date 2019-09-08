@@ -1,12 +1,12 @@
 import PromiseKit
 
-struct ShopCategory: Codable {
+struct ShopCategory: Codable, Equatable {
     let id: Int
     let value: String
     let displayValue: String
 }
 
-struct GoodsCategory: Codable {
+struct GoodsCategory: Codable, Equatable {
     let id: Int
     let value: String
     let displayValue: String

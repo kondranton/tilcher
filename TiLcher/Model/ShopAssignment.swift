@@ -32,16 +32,7 @@ struct ShopAssignment: Codable {
     }
 
     static let mock = ShopAssignment(
-        shop: Shop(
-            id: 11111,
-            name: "Forest",
-            instagramUsername: "forest_store_krd",
-            type: .offline,
-            goodsCategories: [],
-            shopCategories: [],
-            locations: [],
-            image: nil
-        ),
+        shop: .mock,
         assignment: Assignment(
             id: 111,
             cashback: 10,
