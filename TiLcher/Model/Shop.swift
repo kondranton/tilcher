@@ -11,9 +11,10 @@ struct Shop: Codable, Equatable {
     let instagramUsername: String
     let type: DigitalStatus
     let goodsCategories: [GoodsCategory]
-    let shopCategories: [GoodsCategory]
+    let shopCategories: [ShopCategory]
     let locations: [Place]
     let image: RemoteImage?
+    let defaultCashback: Int
 
     var imageUrl: URL? {
         return (image?.url).flatMap(URL.init)
@@ -40,6 +41,7 @@ struct Shop: Codable, Equatable {
         image: RemoteImage(
             id: "",
             url: ""
-        )
+        ),
+        defaultCashback: 3
     )
 }

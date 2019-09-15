@@ -2,8 +2,8 @@ import Alamofire
 import PromiseKit
 
 final class API<Endpoint: APIEndpoint> {
-    public typealias Result = Alamofire.Result
-    public typealias APIRequestCompletion = (Alamofire.DataResponse<Any>) -> Void
+    typealias Result = Alamofire.Result
+    typealias APIRequestCompletion = (Alamofire.DataResponse<Any>) -> Void
 
     func request<ResultType: Codable>(endpoint: Endpoint) -> Promise<ResultType> {
         return Promise { seal in

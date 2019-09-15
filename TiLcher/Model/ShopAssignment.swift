@@ -3,7 +3,6 @@ struct ShopAssignment: Codable {
     var assignment: Assignment
 
     enum Stage: String, Codable {
-        //        assigned, assignment_accepted, completed_review_pending, completed_review_approved, completed_review_rejected
         case assigned
         case assignmentAccepted = "assignment_accepted"
         case completedPending = "completed_review_pending"

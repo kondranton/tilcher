@@ -14,7 +14,7 @@ final class ShopAssignmentsViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUp()
-        fetshShopAssignments()
+        fetchShopAssignments()
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -71,21 +71,23 @@ final class ShopAssignmentsViewController: UITableViewController {
         extendedLayoutIncludesOpaqueBars = true
         edgesForExtendedLayout = [.top, .bottom]
         tableView.refreshControl = SpinnerRefreshControl()
-        tableView.refreshControl?.addTarget(self, action: #selector(fetshShopAssignments), for: .valueChanged)
+        tableView.refreshControl?.addTarget(self, action: #selector(fetchShopAssignments), for: .valueChanged)
         tableView.separatorStyle = .none
+        tableView.estimatedSectionHeaderHeight = 0
+        tableView.estimatedSectionFooterHeight = 0
         tableView.backgroundColor = .backgroundColor
         tableView.register(cellClass: ShopAssignmentTableViewCell.self)
         tableView.register(cellClass: BannerTableViewCell.self)
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(fetshShopAssignments),
+            selector: #selector(fetchShopAssignments),
             name: .assignmentsChanged,
             object: nil
         )
     }
 
     @objc
-    private func fetshShopAssignments() {
+    private func fetchShopAssignments() {
         shopAssignmentsService
             .getShopAssignments()
             .done { assignments in

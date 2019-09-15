@@ -23,7 +23,7 @@ final class MainTabBarController: UITabBarController {
 
     private lazy var controllers = [
         ShopAssignmentsViewController(),
-        BillsViewController(),
+        ReceiptsViewController(),
         ProfileViewController(
             profileService: profileService
         )

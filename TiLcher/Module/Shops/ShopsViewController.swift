@@ -1,7 +1,8 @@
 import SnapKit
 
 final class ShopsViewController: UITableViewController {
-    let shops = [Shop](repeating: .mock, count: 10)
+    let shopService = ShopsService(keychainService: KeychainService())
+    var shops = [Shop]()
     var selectedShop: Shop?
     var selectionCompletion: ((Shop) -> Void)?
 
@@ -18,6 +19,7 @@ final class ShopsViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUp()
+        fetchShops()
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -42,5 +44,16 @@ final class ShopsViewController: UITableViewController {
         tableView.separatorStyle = .none
         tableView.backgroundColor = .backgroundColor
         tableView.register(cellClass: SelectableShopTableViewCell.self)
+    }
+
+    private func fetchShops() {
+        shopService.get()
+            .done { shopList in
+                self.shops = shopList.results
+                self.tableView.reloadData()
+            }
+            .catch { error in
+                assertionFailure(error.localizedDescription)
+            }
     }
 }

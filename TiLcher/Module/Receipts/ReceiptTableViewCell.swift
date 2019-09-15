@@ -1,6 +1,18 @@
 import SnapKit
+import Nuke
 
-final class BillTableViewCell: UnderlayedTableViewCell {
+final class ReceiptTableViewCell: UnderlayedTableViewCell {
+    func setUp(with model: ReceiptViewModel) {
+        priceLabel.text = model.price
+        shopLabel.text = model.shop
+        dateLabel.text = model.date
+        comissionLabel.text = model.commissionAbsolute
+        comissionNoteLabel.text = model.commissionRelative
+        if let url = model.photoURL {
+            Nuke.loadImage(with: url, into: photoImageView)
+        }
+    }
+
     private var photoImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.backgroundColor = .backgroundColor

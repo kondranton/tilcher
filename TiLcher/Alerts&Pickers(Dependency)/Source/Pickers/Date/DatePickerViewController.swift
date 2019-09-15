@@ -19,7 +19,7 @@ extension UIAlertController {
 
 final class DatePickerViewController: UIViewController {
     
-    public typealias Action = (Date) -> Void
+    typealias Action = (Date) -> Void
     
     fileprivate var action: Action?
     
@@ -53,7 +53,7 @@ final class DatePickerViewController: UIViewController {
         action?(datePicker.date)
     }
     
-    public func setDate(_ date: Date) {
+    func setDate(_ date: Date) {
         datePicker.setDate(date, animated: true)
     }
 }

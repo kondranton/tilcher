@@ -2,15 +2,13 @@ import Foundation
 
 struct StylistProfile: Codable {
     struct Statistics: Codable {
-        let looks: Int
-        let instagramPosts: Int
-        let shops: Int
-        let clients: Int
-        let invitedUsers: Int
+        let looksPoints: Int
+        let postsPoints: Int
+        let shopsPoints: Int
+        let totalPoints: Int
     }
 
     struct Balance: Codable {
-        let score: Int
         let cashback: Int
     }
 
@@ -20,7 +18,7 @@ struct StylistProfile: Codable {
     let type: UserRole
     let reviewStatus: UserReviewStatus
     let instagramUsername: String?
-    let counts: Statistics?
+    let pointsData: Statistics?
     var balance: Balance
     var profilePhoto: RemoteImage?
 }

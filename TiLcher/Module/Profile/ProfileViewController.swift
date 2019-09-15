@@ -27,21 +27,28 @@ final class ProfileViewController: UIViewController {
         tableView.showsVerticalScrollIndicator = false
         tableView.dataSource = self
         tableView.refreshControl = self.refreshControl
-
         tableView.register(cellClass: ProfileHeaderTableViewCell.self)
         tableView.register(cellClass: ProfileItemTableViewCell.self)
+
+        // iPad fix
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            let backgroundView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 1000))
+            backgroundView.backgroundColor = .backgroundColor
+            tableView.tableFooterView = backgroundView
+        }
+
         return tableView
     }()
 
     var items: [ProfileItemModel] {
-        guard let statistics = profile.counts else {
+        guard let statistics = profile.pointsData else {
             fatalError("Incomplete profile")
         }
         return [
             .header(
                 ProfileHeaderItemModel(
                     money: profile.balance.cashback,
-                    points: profile.balance.score,
+                    points: statistics.totalPoints,
                     name: profile.name,
                     imagePath: profile.profilePhoto?.url ?? ""
                 )
@@ -49,19 +56,19 @@ final class ProfileViewController: UIViewController {
             .statistics(
                 ProfileStatisticsItemModel(
                     itemType: .looks,
-                    value: statistics.looks
+                    value: statistics.looksPoints
                 )
             ),
             .statistics(
                 ProfileStatisticsItemModel(
                     itemType: .publications,
-                    value: statistics.instagramPosts
+                    value: statistics.postsPoints
                 )
             ),
             .statistics(
                 ProfileStatisticsItemModel(
                     itemType: .shops,
-                    value: statistics.shops
+                    value: statistics.shopsPoints
                 )
             )
             // uncomment when these 2 fields will have sense
@@ -88,14 +95,13 @@ final class ProfileViewController: UIViewController {
             type: .stylist,
             reviewStatus: .approved,
             instagramUsername: "",
-            counts: StylistProfile.Statistics(
-                looks: 0,
-                instagramPosts: 0,
-                shops: 0,
-                clients: 0,
-                invitedUsers: 0
+            pointsData: StylistProfile.Statistics(
+                looksPoints: 0,
+                postsPoints: 0,
+                shopsPoints: 0,
+                totalPoints: 0
             ),
-            balance: StylistProfile.Balance(score: 0, cashback: 0),
+            balance: StylistProfile.Balance(cashback: 0),
             profilePhoto: RemoteImage(id: "", url: "")
         )
         self.profileService = profileService

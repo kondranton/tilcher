@@ -12,8 +12,6 @@ struct GoodsCategory: Codable, Equatable {
     let displayValue: String
 }
 
-
-
 struct Assignment: Codable {
     let id: Int
     let cashback: Int
@@ -21,14 +19,8 @@ struct Assignment: Codable {
     var status: ShopAssignment.Stage
 }
 
-struct ListPageResponse<Item: Codable>: Codable {
-    let next: String?
-    let previous: String?
-    let results: [Item]
-}
-
 final class ShopsService {
-    private let api = API<ShopsEndpoint>()
+    private let api = API<ShopsAssignmentEndpoint>()
 
     private let keychainService: KeychainServiceProtocol
 
@@ -43,6 +35,10 @@ final class ShopsService {
                 fatalError("Should be set")
         }
         return token
+    }
+
+    func get() -> Promise<ListPageResponse<Shop>> {
+        return api.request(endpoint: .get(token: token))
     }
 
     func getShopAssignments() -> Promise<ListPageResponse<ShopAssignment>> {

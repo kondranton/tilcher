@@ -60,7 +60,7 @@ extension UIImageView {
 // MARK: String Helper
 extension String {
     
-    public var initials: String {
+    var initials: String {
         var finalString = String()
         var words = components(separatedBy: .whitespacesAndNewlines)
         
@@ -83,7 +83,7 @@ let kFontResizingProportion: CGFloat = 0.4
 let kColorMinComponent: Int = 30
 let kColorMaxComponent: Int = 214
 
-public typealias GradientColors = (top: UIColor, bottom: UIColor)
+typealias GradientColors = (top: UIColor, bottom: UIColor)
 
 typealias HSVOffset = (hue: CGFloat, saturation: CGFloat, brightness: CGFloat, alpha: CGFloat)
 let kGradientTopOffset: HSVOffset = (hue: -0.025, saturation: 0.05, brightness: 0, alpha: 0)
@@ -91,17 +91,17 @@ let kGradientBotomOffset: HSVOffset = (hue: 0.025, saturation: -0.05, brightness
 
 extension UIImageView {
     
-    public func setImageForName(string: String, backgroundColor: UIColor? = nil, circular: Bool, textAttributes: [NSAttributedString.Key: AnyObject]?, gradient: Bool = false) {
+    func setImageForName(string: String, backgroundColor: UIColor? = nil, circular: Bool, textAttributes: [NSAttributedString.Key: AnyObject]?, gradient: Bool = false) {
         
         setImageForName(string: string, backgroundColor: backgroundColor, circular: circular, textAttributes: textAttributes, gradient: gradient, gradientColors: nil)
     }
     
-    public func setImageForName(string: String, gradientColors: GradientColors? = nil, circular: Bool = true, textAttributes: [NSAttributedString.Key: AnyObject]? = nil) {
+    func setImageForName(string: String, gradientColors: GradientColors? = nil, circular: Bool = true, textAttributes: [NSAttributedString.Key: AnyObject]? = nil) {
         
         setImageForName(string: string, backgroundColor: nil, circular: circular, textAttributes: textAttributes, gradient: true, gradientColors: gradientColors)
     }
     
-    public func setImageForName(string: String, backgroundColor: UIColor? = nil, circular: Bool, textAttributes: [NSAttributedString.Key: AnyObject]? = nil, gradient: Bool = false, gradientColors: GradientColors? = nil) {
+    func setImageForName(string: String, backgroundColor: UIColor? = nil, circular: Bool, textAttributes: [NSAttributedString.Key: AnyObject]? = nil, gradient: Bool = false, gradientColors: GradientColors? = nil) {
         
         let initials: String = initialsFromString(string: string)
         let color: UIColor = (backgroundColor != nil) ? backgroundColor! : randomColor(for: string)

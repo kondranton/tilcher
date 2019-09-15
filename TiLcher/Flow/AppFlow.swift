@@ -20,6 +20,10 @@ final class AppFlow {
     }
 
     func start() {
+        if Environment.current.logoutOnStart {
+            keychainService.clear()
+        }
+
         if keychainService.hasToken() {
             authorizedStart()
         } else {

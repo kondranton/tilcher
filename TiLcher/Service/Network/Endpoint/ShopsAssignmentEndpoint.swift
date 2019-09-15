@@ -1,13 +1,14 @@
 import Foundation
 import Alamofire
 
-enum ShopsEndpoint {
+enum ShopsAssignmentEndpoint {
+    case get(token: String)
     case getAssigned(token: String)
     case acceptAssignment(id: Int, token: String)
     case completeAssignment(id: Int, shopReviewResults: ShopReviewResults, token: String)
 }
 
-extension ShopsEndpoint: APIEndpoint {
+extension ShopsAssignmentEndpoint: APIEndpoint {
     var baseURL: URL {
         guard let url = URL(string: Environment.current.baseURL + "stylist/shops") else {
             fatalError("URL should be valid")
@@ -17,6 +18,8 @@ extension ShopsEndpoint: APIEndpoint {
 
     var path: String {
         switch self {
+        case .get:
+            return ""
         case .getAssigned:
             return "/assigned/"
         case .acceptAssignment:
@@ -28,7 +31,7 @@ extension ShopsEndpoint: APIEndpoint {
 
     var method: Method {
         switch self {
-        case .getAssigned:
+        case .get, .getAssigned:
             return .get
         case .acceptAssignment, .completeAssignment:
             return .post
@@ -37,8 +40,8 @@ extension ShopsEndpoint: APIEndpoint {
 
     var headers: [String: String] {
         switch self {
-        case .getAssigned(let token), .acceptAssignment(_, let token),
-             .completeAssignment(_, _, let token):
+        case .get(let token), .getAssigned(let token),
+             .acceptAssignment(_, let token), .completeAssignment(_, _, let token):
             return [
                 "Authorization": "JWT \(token)"
             ]
@@ -47,7 +50,7 @@ extension ShopsEndpoint: APIEndpoint {
 
     var parameters: [String: Any] {
         switch self {
-        case .getAssigned:
+        case .get, .getAssigned:
             return [:]
         case .acceptAssignment(let id, _):
             return [
@@ -66,7 +69,7 @@ extension ShopsEndpoint: APIEndpoint {
 
     var encoding: ParameterEncoding {
         switch self {
-        case .getAssigned:
+        case .get, .getAssigned:
             return URLEncoding.default
         case .acceptAssignment, .completeAssignment:
             return JSONEncoding.default

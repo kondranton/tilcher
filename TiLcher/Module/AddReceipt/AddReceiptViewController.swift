@@ -2,7 +2,29 @@ import SnapKit
 import YPImagePicker
 import PromiseKit
 
-final class AddBillViewController: UITableViewController {
+struct Receipt: Codable {
+    enum Status: String, Codable {
+        case pending, approved, rejected
+    }
+
+    let id: Int
+    let total: String
+    let purchasedAt: Date
+    let shop: Shop
+    let receiptPhotos: [RemoteImage]
+    var status: Status
+}
+
+struct NewReceipt {
+    var money: Int?
+    var date: Date?
+    var shop: Shop?
+    var photo: UIImage?
+    var remoteImage: RemoteImage?
+}
+
+final class AddReceiptViewController: UITableViewController {
+    private let receiptService = ReceiptService(keychainService: KeychainService())
     private let imageUploadService = ImageUploadService()
     private var imageUploadFinalizer: PMKFinalizer?
 
@@ -22,25 +44,22 @@ final class AddBillViewController: UITableViewController {
         tableView.register(cellClass: BillPhotoTableViewCell.self)
     }
 
-    struct Bill {
-        var money: Int?
-        var date: Date?
-        var shop: Shop?
-        var photo: UIImage?
-        var remoteImage: RemoteImage?
+    var receipt = NewReceipt()
+    var isSending = false {
+        didSet {
+            tableView.reloadData()
+        }
     }
-
-    var bill = Bill()
 
     var viewModel: [Field] {
         return [
-            .money(bill.money),
-            .date(bill.date),
-            .shop(bill.shop),
-            .photo(bill.photo),
+            .money(receipt.money),
+            .date(receipt.date),
+            .shop(receipt.shop),
+            .photo(receipt.photo),
             .action(
-                enabled: bill.money != nil && bill.date != nil
-                    && bill.shop != nil && bill.photo != nil
+                enabled: receipt.money != nil && receipt.date != nil
+                    && receipt.shop != nil && receipt.photo != nil && !isSending
             )
         ]
     }
@@ -59,7 +78,7 @@ final class AddBillViewController: UITableViewController {
                 value: value.flatMap(String.init) ?? "",
                 keyboardType: .numberPad
             ) { [weak self] text in
-                self?.bill.money = Int(text)
+                self?.receipt.money = Int(text)
                 self?.tableView.reloadRows(at: [IndexPath(row: 4, section: 0)], with: .none)
             }
             return cell
@@ -94,8 +113,10 @@ final class AddBillViewController: UITableViewController {
             }
         case .action(let enabled):
             let cell: ActionButtonTableViewCell = tableView.dequeueReusableCell(for: indexPath)
-            cell.setUp(with: ActionButtonViewModel(title: "Готово", isEnabled: enabled)) {
-                self.navigationController?.popToRootViewController(animated: true)
+            cell.setUp(
+                with: ActionButtonViewModel(title: "Готово", isEnabled: enabled)
+            ) { [weak self] in
+                self?.doneTap()
             }
             return cell
         }
@@ -132,11 +153,11 @@ final class AddBillViewController: UITableViewController {
         let alert = UIAlertController(style: .actionSheet, title: "Выбрать дату")
         alert.addDatePicker(
             mode: .dateAndTime,
-            date: bill.date ?? Date(),
+            date: receipt.date ?? Date(),
             minimumDate: Date().addingTimeInterval(-30_000_000),
             maximumDate: Date().addingTimeInterval(60 * 5)
         ) { [weak self] date in
-            self?.bill.date = date
+            self?.receipt.date = date
             self?.tableView.reloadData()
         }
         alert.addAction(title: "OK", style: .cancel)
@@ -145,23 +166,49 @@ final class AddBillViewController: UITableViewController {
 
     private func openShops() {
         let viewController = ShopsViewController()
-        viewController.selectedShop = bill.shop
+        viewController.selectedShop = receipt.shop
         viewController.selectionCompletion = { [weak self] shop in
-            self?.bill.shop = shop
+            self?.receipt.shop = shop
             self?.tableView.reloadData()
         }
         show(viewController, sender: nil)
     }
 
     private func set(image: UIImage) {
-        bill.photo = image
+        receipt.photo = image
         tableView.reloadData()
         imageUploadFinalizer = imageUploadService.upload(image: image)
             .done { remoteImage in
-                self.bill.remoteImage = remoteImage
+                self.receipt.remoteImage = remoteImage
             }
             .catch { error in
                 assertionFailure(error.localizedDescription)
+            }
+    }
+
+    private func doneTap() {
+        if let finalizer = imageUploadFinalizer {
+            finalizer.finally {
+                self.createReceipt()
+            }
+        } else {
+            createReceipt()
+        }
+    }
+
+    private func createReceipt() {
+        isSending = true
+        receiptService
+            .create(receipt: receipt)
+            .done {
+                NotificationCenter.default.post(name: .receiptsChanged, object: nil)
+                self.navigationController?.popViewController(animated: true)
+            }
+            .catch { error in
+                assertionFailure(error.localizedDescription)
+            }
+            .finally {
+                self.isSending = false
             }
     }
 

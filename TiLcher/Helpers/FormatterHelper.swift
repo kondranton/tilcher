@@ -8,4 +8,8 @@ class FormatterHelper {
         formatter.dateFormat = "dd.MM.yyyy"
         return formatter.string(from: date)
     }
+
+    static func serverValue(from date: Date) -> Int {
+        return Int(date.timeIntervalSince1970)
+    }
 }

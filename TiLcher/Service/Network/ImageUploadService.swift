@@ -23,7 +23,7 @@ final class ImageUploadService {
                         mimeType: "image/jpg"
                     )
                 },
-                to: "https://tilcher-stage.herokuapp.com/api/v1/images/",
+                to: Environment.current.baseURL + "images/",
                 headers: [
                     "Authorization": "JWT \(token)"
                 ],

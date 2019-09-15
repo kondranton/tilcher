@@ -1,6 +1,6 @@
 import Alamofire
 
-public typealias Method = Alamofire.HTTPMethod
+typealias Method = Alamofire.HTTPMethod
 
 protocol APIEndpoint {
     var baseURL: URL { get }
