@@ -124,6 +124,7 @@
 		1B86C79F232D0DDA0039DF7E /* ListPageResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B86C79E232D0DDA0039DF7E /* ListPageResponse.swift */; };
 		1B86C7A1232D0ED90039DF7E /* ReceiptService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B86C7A0232D0ED90039DF7E /* ReceiptService.swift */; };
 		1B86C7A3232D0F410039DF7E /* ReceiptEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B86C7A2232D0F410039DF7E /* ReceiptEndpoint.swift */; };
+		1B86C7AD232EC6210039DF7E /* ReceiptViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B86C7AC232EC6210039DF7E /* ReceiptViewModel.swift */; };
 		1B9A7542230A56DA00509D6A /* HeaderedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9A7541230A56DA00509D6A /* HeaderedTableViewCell.swift */; };
 		1B9A7544230A57FF00509D6A /* ResultsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9A7543230A57FF00509D6A /* ResultsTableViewCell.swift */; };
 		1B9A7546230A602900509D6A /* ResultInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9A7545230A602900509D6A /* ResultInputView.swift */; };
@@ -285,6 +286,7 @@
 		1B86C79E232D0DDA0039DF7E /* ListPageResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListPageResponse.swift; sourceTree = "<group>"; };
 		1B86C7A0232D0ED90039DF7E /* ReceiptService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptService.swift; sourceTree = "<group>"; };
 		1B86C7A2232D0F410039DF7E /* ReceiptEndpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReceiptEndpoint.swift; sourceTree = "<group>"; };
+		1B86C7AC232EC6210039DF7E /* ReceiptViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptViewModel.swift; sourceTree = "<group>"; };
 		1B9A7541230A56DA00509D6A /* HeaderedTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderedTableViewCell.swift; sourceTree = "<group>"; };
 		1B9A7543230A57FF00509D6A /* ResultsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsTableViewCell.swift; sourceTree = "<group>"; };
 		1B9A7545230A602900509D6A /* ResultInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultInputView.swift; sourceTree = "<group>"; };
@@ -467,6 +469,7 @@
 			children = (
 				1B33C48623243E9100776C49 /* ReceiptsViewController.swift */,
 				1B33C48B2324407100776C49 /* ReceiptTableViewCell.swift */,
+				1B86C7AC232EC6210039DF7E /* ReceiptViewModel.swift */,
 			);
 			path = Receipts;
 			sourceTree = "<group>";
@@ -1282,6 +1285,7 @@
 				1B1A4F4B23146C3900A98F33 /* AnalyticsReporter.swift in Sources */,
 				1B1A4F5323146EC400A98F33 /* AuthScreenType.swift in Sources */,
 				1B9A7542230A56DA00509D6A /* HeaderedTableViewCell.swift in Sources */,
+				1B86C7AD232EC6210039DF7E /* ReceiptViewModel.swift in Sources */,
 				1B33C4F02325385200776C49 /* String+Extensions.swift in Sources */,
 				1B15E3442311B41A00E2170E /* InstagramViewController.swift in Sources */,
 				1B33C48A23243F5100776C49 /* AddReceiptViewController.swift in Sources */,

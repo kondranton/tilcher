@@ -8,8 +8,16 @@ struct StylistProfile: Codable {
         let totalPoints: Int
     }
 
-    struct Balance: Codable {
-        let cashback: Int
+    struct Payment: Codable {
+        private let pendingPayment: String
+
+        var pending: Int {
+            return Int(Double(pendingPayment) ?? 0) ?? 0
+        }
+
+        init(pending: Int) {
+            self.pendingPayment = "\(pending)"
+        }
     }
 
     let id: Int
@@ -19,6 +27,6 @@ struct StylistProfile: Codable {
     let reviewStatus: UserReviewStatus
     let instagramUsername: String?
     let pointsData: Statistics?
-    var balance: Balance
+    var payment: Payment
     var profilePhoto: RemoteImage?
 }

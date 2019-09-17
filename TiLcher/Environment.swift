@@ -8,7 +8,7 @@ struct Environment {
 }
 
 extension Environment {
-    static let current: Environment = .test(logoutOnStart: true)
+    static let current: Environment = .test(logoutOnStart: false)
 }
 
 extension Environment {

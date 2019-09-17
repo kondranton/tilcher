@@ -47,7 +47,7 @@ final class ProfileViewController: UIViewController {
         return [
             .header(
                 ProfileHeaderItemModel(
-                    money: profile.balance.cashback,
+                    money: profile.payment.pending,
                     points: statistics.totalPoints,
                     name: profile.name,
                     imagePath: profile.profilePhoto?.url ?? ""
@@ -101,7 +101,7 @@ final class ProfileViewController: UIViewController {
                 shopsPoints: 0,
                 totalPoints: 0
             ),
-            balance: StylistProfile.Balance(cashback: 0),
+            payment: StylistProfile.Payment(pending: 0),
             profilePhoto: RemoteImage(id: "", url: "")
         )
         self.profileService = profileService

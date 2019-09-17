@@ -1,27 +1,5 @@
 import SnapKit
 
-struct ReceiptViewModel {
-    let price: String
-    let shop: String
-    let date: String
-    let commissionAbsolute: String
-    let commissionRelative: String
-    let photoURL: URL?
-}
-
-extension ReceiptViewModel {
-    init(receipt: Receipt) {
-        price = "\(receipt.total)р"
-        shop = receipt.shop.name
-        date = FormatterHelper.string(from: receipt.purchasedAt)
-        let total = Double(receipt.total) ?? 1
-        let comission = Double(receipt.shop.defaultCashback) / 100
-        commissionAbsolute = "\(Int(total * comission))"
-        commissionRelative = "кэшбек \(receipt.shop.defaultCashback)%"
-        photoURL = receipt.receiptPhotos.first.flatMap { URL(string: $0.url) }
-    }
-}
-
 final class ReceiptsViewController: UITableViewController {
     private let receiptService = ReceiptService(keychainService: KeychainService())
 
@@ -57,6 +35,21 @@ final class ReceiptsViewController: UITableViewController {
         }
     }
 
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if sections.isEmpty {
+            return nil
+        } else {
+            let title = sections[section].type.title
+            let label = HeaderLabel()
+            label.text = title
+            return label
+        }
+    }
+
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 40
+    }
+
     @objc
     private func addTap() {
         let viewController = AddReceiptViewController()
@@ -76,6 +69,13 @@ final class ReceiptsViewController: UITableViewController {
             animated: false
         )
 
+        extendedLayoutIncludesOpaqueBars = true
+        edgesForExtendedLayout = [.top, .bottom]
+        tableView.refreshControl = SpinnerRefreshControl()
+        tableView.refreshControl?.addTarget(self, action: #selector(fetchReceipts), for: .valueChanged)
+        tableView.separatorStyle = .none
+        tableView.estimatedSectionHeaderHeight = 0
+        tableView.estimatedSectionFooterHeight = 0
         tableView.separatorStyle = .none
         tableView.backgroundColor = .backgroundColor
         tableView.register(cellClass: ReceiptTableViewCell.self)
@@ -102,6 +102,7 @@ final class ReceiptsViewController: UITableViewController {
             }
             .finally {
                 self.tableView.reloadData()
+                self.refreshControl?.endRefreshing()
             }
     }
 
