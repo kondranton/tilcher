@@ -2,16 +2,22 @@ import Foundation
 
 struct StylistProfile: Codable {
     struct Statistics: Codable {
-        let looks: Int
-        let instagramPosts: Int
-        let shops: Int
-        let clients: Int
-        let invitedUsers: Int
+        let looksPoints: Int
+        let postsPoints: Int
+        let shopsPoints: Int
+        let totalPoints: Int
     }
 
-    struct Balance: Codable {
-        let score: Int
-        let cashback: Int
+    struct Payment: Codable {
+        private let pendingPayment: String
+
+        var pending: Int {
+            return Int(Double(pendingPayment) ?? 0) ?? 0
+        }
+
+        init(pending: Int) {
+            self.pendingPayment = "\(pending)"
+        }
     }
 
     let id: Int
@@ -20,7 +26,7 @@ struct StylistProfile: Codable {
     let type: UserRole
     let reviewStatus: UserReviewStatus
     let instagramUsername: String?
-    let counts: Statistics?
-    var balance: Balance
+    let pointsData: Statistics?
+    var payment: Payment
     var profilePhoto: RemoteImage?
 }

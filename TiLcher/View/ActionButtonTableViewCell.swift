@@ -15,10 +15,10 @@ final class ActionButtonTableViewCell: UITableViewCell, ViewReusable {
 
     var action: (() -> Void)?
 
-    func setUp(with model: String, action: @escaping () -> Void) {
+    func setUp(with model: ActionButtonViewModel, action: @escaping () -> Void) {
         actionButton.setAttributedTitle(
             NSAttributedString(
-                string: model,
+                string: model.title,
                 attributes: [
                     .font: UIFont.systemFont(ofSize: 17, weight: .bold),
                     .foregroundColor: UIColor.black
@@ -26,6 +26,8 @@ final class ActionButtonTableViewCell: UITableViewCell, ViewReusable {
             ),
             for: .normal
         )
+        actionButton.backgroundColor = model.isEnabled ? .mainColor : .white
+        actionButton.isEnabled = model.isEnabled
         self.action = action
     }
 

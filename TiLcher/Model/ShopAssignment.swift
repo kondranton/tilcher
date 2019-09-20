@@ -3,7 +3,6 @@ struct ShopAssignment: Codable {
     var assignment: Assignment
 
     enum Stage: String, Codable {
-        //        assigned, assignment_accepted, completed_review_pending, completed_review_approved, completed_review_rejected
         case assigned
         case assignmentAccepted = "assignment_accepted"
         case completedPending = "completed_review_pending"
@@ -32,16 +31,7 @@ struct ShopAssignment: Codable {
     }
 
     static let mock = ShopAssignment(
-        shop: Shop(
-            id: 11111,
-            name: "Forest",
-            instagramUsername: "forest_store_krd",
-            type: .offline,
-            goodsCategories: [],
-            shopCategories: [],
-            locations: [],
-            image: nil
-        ),
+        shop: .mock,
         assignment: Assignment(
             id: 111,
             cashback: 10,

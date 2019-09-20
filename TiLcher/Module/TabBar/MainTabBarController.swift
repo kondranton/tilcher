@@ -8,6 +8,11 @@ final class MainTabBarController: UITabBarController {
             selectedImage: nil
         ),
         UITabBarItem(
+            title: "Чеки",
+            image: UIImage(named: "bills"),
+            selectedImage: nil
+        ),
+        UITabBarItem(
             title: "Профиль",
             image: UIImage(named: "profile"),
             selectedImage: nil
@@ -17,7 +22,8 @@ final class MainTabBarController: UITabBarController {
     private let profileService: ProfileServiceProtocol
 
     private lazy var controllers = [
-        ShopsViewController(),
+        ShopAssignmentsViewController(),
+        ReceiptsViewController(),
         ProfileViewController(
             profileService: profileService
         )

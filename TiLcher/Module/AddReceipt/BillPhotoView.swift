@@ -1,0 +1,72 @@
+import SnapKit
+import Nuke
+
+final class BillPhotoEditView: UIView {
+    var onTouch: (() -> Void)?
+
+    var imageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.backgroundColor = .infoGrayColor
+        return imageView
+    }()
+
+    private var editLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Поменять"
+        label.textColor = .white
+        label.font = .systemFont(ofSize: 12, weight: .bold)
+        label.textAlignment = .center
+
+        return label
+    }()
+
+    func load(from url: URL) {
+        Nuke.loadImage(with: url, into: imageView)
+    }
+
+    override init(frame: CGRect) {
+        super.init(frame: .zero)
+        setUp()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func setUp() {
+        layer.cornerRadius = 8
+        layer.masksToBounds = true
+
+        let editUnderlayView = UIView()
+        editUnderlayView.backgroundColor = .blackSemitransparentColor
+
+        [
+            imageView,
+            editUnderlayView
+        ]
+        .forEach(addSubview)
+
+        editUnderlayView.addSubview(editLabel)
+
+        imageView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+
+        editUnderlayView.snp.makeConstraints { make in
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.height.equalTo(32)
+        }
+
+        editLabel.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.width.equalToSuperview().multipliedBy(0.5)
+        }
+    }
+
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        onTouch?()
+    }
+}

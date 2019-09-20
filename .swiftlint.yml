@@ -4,6 +4,8 @@ indentation: 4
 
 included:
   - TiLcher/
+excluded:
+  - TiLcher/Alerts&Pickers(Dependency)/
 
 whitelist_rules:
   - array_init

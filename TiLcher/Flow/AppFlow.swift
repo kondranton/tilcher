@@ -20,6 +20,10 @@ final class AppFlow {
     }
 
     func start() {
+        if Environment.current.logoutOnStart {
+            keychainService.clear()
+        }
+
         if keychainService.hasToken() {
             authorizedStart()
         } else {
@@ -61,8 +65,10 @@ final class AppFlow {
         profileService.fetchProfile()
             .done { profile in
                 if profile.type == .consumer {
+                    AnalyticsProperties.userRole(type: .consumer).send()
                     self.start(with: ProfileReviewViewController(userType: .consumer))
                 } else {
+                    AnalyticsProperties.userRole(type: .stylist).send()
                     switch profile.reviewStatus {
                     case .pending:
                         self.start(with: ProfileReviewViewController(userType: .stylist))

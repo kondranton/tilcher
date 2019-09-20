@@ -3,7 +3,6 @@ PODS:
   - Amplitude-iOS (4.6.0)
   - Crashlytics (3.13.4):
     - Fabric (~> 1.10.2)
-  - CRRefresh (1.1.3)
   - Fabric (1.10.2)
   - Firebase/Analytics (6.1.0):
     - Firebase/Core
@@ -96,7 +95,6 @@ DEPENDENCIES:
   - Alamofire (= 4.8.2)
   - Amplitude-iOS (= 4.6.0)
   - Crashlytics (= 3.13.4)
-  - CRRefresh
   - Fabric (= 1.10.2)
   - Firebase/Analytics (= 6.1.0)
   - GoogleMaps (= 3.3.0)
@@ -117,7 +115,6 @@ SPEC REPOS:
     - Alamofire
     - Amplitude-iOS
     - Crashlytics
-    - CRRefresh
     - Fabric
     - Firebase
     - FirebaseAnalytics
@@ -146,7 +143,6 @@ SPEC CHECKSUMS:
   Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
   Amplitude-iOS: ac1715ae68104b7a51723209ad574f60ab22ae5f
   Crashlytics: 2dfd686bcb918dc10ee0e76f7f853fe42c7bd552
-  CRRefresh: 1415d4ae06837fa7bb064c44f2e102f3ef517044
   Fabric: 706c8b8098fff96c33c0db69cbf81f9c551d0d74
   Firebase: 8d77bb33624ae9b62d745d82ec023de5f70f7e4f
   FirebaseAnalytics: 629301c2b9925f3537d4093a17a72751ae5b7084
@@ -171,6 +167,6 @@ SPEC CHECKSUMS:
   SwiftLint: fed9c66336e41fc74dc48a73678380718f0c8b0e
   YPImagePicker: 8039f89ad79281545fa868486f32d9bf5d65ede1
 
-PODFILE CHECKSUM: 1319d2f60104eae7ca6f269396576a48800a7d5e
+PODFILE CHECKSUM: 8983d122faabe65105108355d5eefaba7d905ca2
 
 COCOAPODS: 1.7.5

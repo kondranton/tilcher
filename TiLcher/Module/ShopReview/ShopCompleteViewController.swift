@@ -72,7 +72,12 @@ final class ShopCompleteViewController: UITableViewController {
             return cell
         case 2:
             let cell: ActionButtonTableViewCell = tableView.dequeueReusableCell(for: indexPath)
-            cell.setUp(with: "Отправить") { [weak self] in
+            cell.setUp(
+                with: ActionButtonViewModel(
+                    title: "Отправить",
+                    isEnabled: true
+                )
+            ) { [weak self] in
                 self?.send()
             }
             return cell
