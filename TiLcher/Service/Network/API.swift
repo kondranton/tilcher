@@ -1,22 +1,37 @@
 import Alamofire
 import PromiseKit
 
-final class API<Endpoint: APIEndpoint> {
+final class API<Endpoint: APIService> {
     typealias Result = Alamofire.Result
     typealias APIRequestCompletion = (Alamofire.DataResponse<Any>) -> Void
 
-    func request<ResultType: Codable>(endpoint: Endpoint) -> Promise<ResultType> {
+    private let keychainService: KeychainServiceProtocol
+
+    init(
+        keychainService: KeychainServiceProtocol = KeychainService()
+    ) {
+        self.keychainService = keychainService
+    }
+
+    func request<ResultType: Decodable>(endpoint: Endpoint, decoder: JSONDecoder? = nil) -> Promise<ResultType> {
+        var headers = endpoint.headers
+        if endpoint.requiresAuthorization, let token = keychainService.fetchAccessToken() {
+            headers["Authorization"] = "JWT \(token)"
+        }
+
         return Promise { seal in
             Alamofire.request(
                 endpoint.baseURL.appendingPathComponent(endpoint.path),
                 method: endpoint.method,
                 parameters: endpoint.parameters,
                 encoding: endpoint.encoding,
-                headers: endpoint.headers
+                headers: headers
             )
-            .validate { _, response, data in
+            .validate { request, response, data in
                 if  400...600 ~= response.statusCode {
-                    let decoder = JSONDecoder.common
+                    dump("validation failed for \(request?.url?.absoluteString ?? "") status code \(response.statusCode)")
+
+                    let decoder = decoder ?? .common
                     guard
                         let data = data,
                         let errors = try? decoder.decode(APIErrors.self, from: data),
@@ -24,6 +39,10 @@ final class API<Endpoint: APIEndpoint> {
                     else {
                         assertionFailure("Unhandled")
                         return .failure(UnknownError())
+                    }
+
+                    if error.code == "authentication_failed" || response.statusCode == 401 {
+                        self.keychainService.clear()
                     }
 
                     return .failure(error)

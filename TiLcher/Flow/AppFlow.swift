@@ -20,10 +20,6 @@ final class AppFlow {
     }
 
     func start() {
-        if Environment.current.logoutOnStart {
-            keychainService.clear()
-        }
-
         if keychainService.hasToken() {
             authorizedStart()
         } else {
@@ -75,6 +71,7 @@ final class AppFlow {
                     case .approved:
                         self.start(with: self.makeMainController())
                     case .rejected:
+                        self.keychainService.clear()
                         self.start(with: self.makeAuthController())
                     }
                 }

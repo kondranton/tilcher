@@ -46,20 +46,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 extension AppDelegate {
     fileprivate func setUpAppearence() {
         window?.tintColor = .backgroundColor
-        UINavigationBar.appearance().tintColor = .black
-        UINavigationBar.appearance().isTranslucent = false
-        UINavigationBar.appearance().backgroundColor = UIColor.backgroundColor
-        UINavigationBar.appearance().barTintColor = UIColor.backgroundColor
-        UINavigationBar.appearance().shadowImage = UIImage()
-        UINavigationBar.appearance().titleTextAttributes = [
-            .foregroundColor: UIColor.black
-        ]
-        if #available(iOS 11.0, *) {
-            UINavigationBar.appearance().largeTitleTextAttributes = [
+        window?.backgroundColor = .backgroundColor
+
+        if #available(iOS 13.0, *) {
+        } else {
+            UINavigationBar.appearance().tintColor = .black
+            UINavigationBar.appearance().isTranslucent = false
+            UINavigationBar.appearance().backgroundColor = UIColor.backgroundColor
+            UINavigationBar.appearance().barTintColor = UIColor.backgroundColor
+            UINavigationBar.appearance().shadowImage = UIImage()
+            UINavigationBar.appearance().titleTextAttributes = [
                 .foregroundColor: UIColor.black
             ]
-        } else {
-            UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+            if #available(iOS 11.0, *) {
+                UINavigationBar.appearance().largeTitleTextAttributes = [
+                    .foregroundColor: UIColor.black
+                ]
+            } else {
+                UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+            }
         }
     }
 }

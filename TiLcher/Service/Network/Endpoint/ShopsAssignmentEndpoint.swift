@@ -8,7 +8,11 @@ enum ShopsAssignmentEndpoint {
     case completeAssignment(id: Int, shopReviewResults: ShopReviewResults, token: String)
 }
 
-extension ShopsAssignmentEndpoint: APIEndpoint {
+extension ShopsAssignmentEndpoint: APIService {
+    var requiresAuthorization: Bool {
+        return true
+    }
+
     var baseURL: URL {
         guard let url = URL(string: Environment.current.baseURL + "stylist/shops") else {
             fatalError("URL should be valid")
@@ -19,7 +23,7 @@ extension ShopsAssignmentEndpoint: APIEndpoint {
     var path: String {
         switch self {
         case .get:
-            return ""
+            return "/"
         case .getAssigned:
             return "/assigned/"
         case .acceptAssignment:
@@ -50,7 +54,11 @@ extension ShopsAssignmentEndpoint: APIEndpoint {
 
     var parameters: [String: Any] {
         switch self {
-        case .get, .getAssigned:
+        case .get:
+            return [
+                "page_size": 1000
+            ]
+        case .getAssigned:
             return [:]
         case .acceptAssignment(let id, _):
             return [

@@ -5,7 +5,11 @@ enum ReceiptEndpoint {
     case get(token: String), create(token: String, bill: NewReceipt)
 }
 
-extension ReceiptEndpoint: APIEndpoint {
+extension ReceiptEndpoint: APIService {
+    var requiresAuthorization: Bool {
+        return true
+    }
+
     var baseURL: URL {
         guard let url = URL(string: Environment.current.baseURL + "stylist/receipts/") else {
             fatalError("URL should be valid")

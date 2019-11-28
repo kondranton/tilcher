@@ -13,8 +13,8 @@ final class ShopAssignmentsViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setUp()
-        fetchShopAssignments()
+        self.setUp()
+        self.fetchShopAssignments()
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -68,16 +68,16 @@ final class ShopAssignmentsViewController: UITableViewController {
     }
 
     private func setUp() {
-        extendedLayoutIncludesOpaqueBars = true
-        edgesForExtendedLayout = [.top, .bottom]
-        tableView.refreshControl = SpinnerRefreshControl()
-        tableView.refreshControl?.addTarget(self, action: #selector(fetchShopAssignments), for: .valueChanged)
-        tableView.separatorStyle = .none
-        tableView.estimatedSectionHeaderHeight = 0
-        tableView.estimatedSectionFooterHeight = 0
-        tableView.backgroundColor = .backgroundColor
-        tableView.register(cellClass: ShopAssignmentTableViewCell.self)
-        tableView.register(cellClass: BannerTableViewCell.self)
+        self.extendedLayoutIncludesOpaqueBars = true
+        self.edgesForExtendedLayout = [.top, .bottom]
+        self.tableView.refreshControl = SpinnerRefreshControl()
+        self.tableView.refreshControl?.addTarget(self, action: #selector(fetchShopAssignments), for: .valueChanged)
+        self.tableView.separatorStyle = .none
+        self.tableView.estimatedSectionHeaderHeight = 0
+        self.tableView.estimatedSectionFooterHeight = 0
+        self.tableView.backgroundColor = .backgroundColor
+        self.tableView.register(cellClass: ShopAssignmentTableViewCell.self)
+        self.tableView.register(cellClass: BannerTableViewCell.self)
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(fetchShopAssignments),
@@ -88,18 +88,14 @@ final class ShopAssignmentsViewController: UITableViewController {
 
     @objc
     private func fetchShopAssignments() {
-        shopAssignmentsService
-            .getShopAssignments()
-            .done { assignments in
-                self.got(assignments: assignments)
-            }
-            .catch { error in
-                assertionFailure(error.localizedDescription)
-            }
-            .finally {
-                self.tableView.reloadData()
-                self.refreshControl?.endRefreshing()
-            }
+        shopAssignmentsService.getShopAssignments().done { assignments in
+            self.got(assignments: assignments)
+        }.catch { error in
+            assertionFailure(error.localizedDescription)
+        }.finally {
+            self.tableView.reloadData()
+            self.refreshControl?.endRefreshing()
+        }
     }
 
     private func got(assignments: ListPageResponse<ShopAssignment>) {

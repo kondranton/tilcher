@@ -56,19 +56,19 @@ final class ProfileViewController: UIViewController {
             .statistics(
                 ProfileStatisticsItemModel(
                     itemType: .looks,
-                    value: statistics.looksPoints
+                    value: statistics.looksCount
                 )
             ),
             .statistics(
                 ProfileStatisticsItemModel(
                     itemType: .publications,
-                    value: statistics.postsPoints
+                    value: statistics.publicationsCount
                 )
             ),
             .statistics(
                 ProfileStatisticsItemModel(
                     itemType: .shops,
-                    value: statistics.shopsPoints
+                    value: statistics.shopsCount
                 )
             )
             // uncomment when these 2 fields will have sense
@@ -99,7 +99,10 @@ final class ProfileViewController: UIViewController {
                 looksPoints: 0,
                 postsPoints: 0,
                 shopsPoints: 0,
-                totalPoints: 0
+                totalPoints: 0,
+                looksCount: 0,
+                publicationsCount: 0,
+                shopsCount: 0
             ),
             payment: StylistProfile.Payment(pending: 0),
             profilePhoto: RemoteImage(id: "", url: "")

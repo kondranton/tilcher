@@ -6,7 +6,7 @@ enum ProfileEndpoint {
     case update(profile: EditableUserProfile, token: String)
 }
 
-extension ProfileEndpoint: APIEndpoint {
+extension ProfileEndpoint: APIService {
     var baseURL: URL {
         guard let url = URL(string: Environment.current.baseURL + "stylist/profile") else {
             fatalError("URL should be valid")
@@ -66,5 +66,9 @@ extension ProfileEndpoint: APIEndpoint {
         case .update:
             return JSONEncoding.default
         }
+    }
+
+    var requiresAuthorization: Bool {
+        return true
     }
 }

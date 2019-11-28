@@ -6,13 +6,17 @@ struct StylistProfile: Codable {
         let postsPoints: Int
         let shopsPoints: Int
         let totalPoints: Int
+
+        let looksCount: Int
+        let publicationsCount: Int
+        let shopsCount: Int
     }
 
     struct Payment: Codable {
         private let pendingPayment: String
 
         var pending: Int {
-            return Int(Double(pendingPayment) ?? 0) ?? 0
+            return Int(Double(pendingPayment) ?? 0)
         }
 
         init(pending: Int) {

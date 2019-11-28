@@ -7,7 +7,7 @@ enum AuthorizationEndpoint {
     case signup(user: NewUserProfile, verificationPackage: AuthVerificationPackage)
 }
 
-extension AuthorizationEndpoint: APIEndpoint {
+extension AuthorizationEndpoint: APIService {
     var baseURL: URL {
         guard let url = URL(string: Environment.current.baseURL + "auth") else {
             fatalError("URL should be valid")
@@ -59,5 +59,9 @@ extension AuthorizationEndpoint: APIEndpoint {
 
     var encoding: ParameterEncoding {
         return JSONEncoding.default
+    }
+
+    var requiresAuthorization: Bool {
+        return false
     }
 }
